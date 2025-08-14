@@ -1,0 +1,34 @@
+{
+  "hosting": [
+    {
+      "site": "wheel-visit-click",
+      "public": "dist/wheel-visit-click",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "site": "wheel-visit-auto",
+      "public": "dist/wheel-visit-auto",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
