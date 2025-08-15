@@ -1,4 +1,5 @@
 import '../css/main.css'
+import { calculateWheelSize, getElementSize } from './config.js'
 
 let devMode = false;
 let gameMode = import.meta.env.VITE_GAME_MODE || 'click';
@@ -6,16 +7,28 @@ const isDevelopment = import.meta.env.DEV;
 
 document.querySelector('#app').innerHTML = `
   <div class="bg-container">
-    <div class="main-wheel-container">
-      <h1>Visit Wheel</h1>
-      <div class="card">
-        <p>
-          Добро пожаловать в проект Visit Wheel!
-        </p>
+    <div class="main-container">
+      <div class="logo1"></div>
+      <div class="logo2"></div>
+      <div class="title"></div>
+      <div class="man1"></div>
+      <div class="wheel-wrapper">
+        <div class="wheel-part1"></div>
+        <div class="wheel-part2"></div>
+        <div class="wheel-part3"></div>
+        <div class="wheel-text"></div>
       </div>
-      <p class="read-the-docs">
-        Измените <code>main.js</code> и сохраните, чтобы увидеть обновления.
-      </p>
+      <div class="man2"></div>
+    </div>
+    <div class="media-container">
+      <div class="media1">
+        <div class="logo1"></div>
+        <div class="man1"></div>
+      </div>
+      <div class="media2">
+        <div class="logo2"></div>
+        <div class="man2"></div>
+      </div>
     </div>
   </div>
   ${isDevelopment ? `
@@ -134,3 +147,77 @@ if (savedMode && (savedMode === 'click' || savedMode === 'auto')) {
 
 // Initialize mode
 updateGameMode();
+
+// Apply responsive sizing
+function applyResponsiveSizing() {
+  const wheelSize = calculateWheelSize();
+  
+  // Get element sizes
+  const logoSize = getElementSize('logo');
+  const manSize = getElementSize('man');
+  const titleSize = getElementSize('title');
+  const wheelElementSize = getElementSize('wheel');
+  
+  // Set CSS custom properties
+  document.documentElement.style.setProperty('--wheel-size', `${wheelSize}px`);
+  document.documentElement.style.setProperty('--logo-width', `${logoSize.width}px`);
+  document.documentElement.style.setProperty('--logo-height', `${logoSize.height}px`);
+  document.documentElement.style.setProperty('--man-width', `${manSize.width}px`);
+  document.documentElement.style.setProperty('--man-height', `${manSize.height}px`);
+  document.documentElement.style.setProperty('--title-width', `${titleSize.width}px`);
+  document.documentElement.style.setProperty('--title-height', `${titleSize.height}px`);
+  document.documentElement.style.setProperty('--wheel-wrapper-width', `${wheelElementSize.width}px`);
+  document.documentElement.style.setProperty('--wheel-wrapper-height', `${wheelElementSize.height}px`);
+  
+  console.log(`Wheel size set to: ${wheelSize}px`);
+}
+
+// Apply sizing on load
+applyResponsiveSizing();
+
+// Reapply sizing on window resize
+window.addEventListener('resize', applyResponsiveSizing);
+
+// Disable zoom and scroll for all devices including multitouch
+document.addEventListener('touchstart', function(e) {
+  if (e.touches.length > 1) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
+document.addEventListener('touchmove', function(e) {
+  // Allow single touch move for game interactions, prevent multi-touch
+  if (e.touches.length > 1) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
+document.addEventListener('touchend', function(e) {
+  if (e.touches.length > 0) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
+// Disable double tap zoom
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(event) {
+  const now = (new Date()).getTime();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, { passive: false });
+
+// Disable mouse wheel zoom
+document.addEventListener('wheel', function(e) {
+  if (e.ctrlKey) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
+// Disable keyboard zoom
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '0')) {
+    e.preventDefault();
+  }
+}, { passive: false });
