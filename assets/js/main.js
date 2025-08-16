@@ -314,19 +314,19 @@ function initEntranceAnimations() {
     opacity: 0
   })
   
-  // Part5
+  // Part5 - с уменьшенным scale до 0.30
   .to('.wheel-part5', {
     duration: 0.8,
-    scale: 1,
+    scale: 0.30,
     rotation: 0,
     opacity: 1,
     ease: "back.out(1.7)"
   }, 0)
   
-  // Part6
+  // Part6 - с уменьшенным scale до 0.30
   .to('.wheel-part6', {
     duration: 0.6,
-    scale: 1,
+    scale: 0.30,
     opacity: 1,
     ease: "back.out(1.5)"
   }, 0)
@@ -418,7 +418,69 @@ function initEntranceAnimations() {
 // Initialize entrance animations AFTER DOM is ready
 setTimeout(() => {
   initEntranceAnimations();
+  
+  // Инициализируем кнопки после завершения анимации part5
+  setTimeout(() => {
+    initButtonHandlers();
+  }, 1000); // После завершения анимации part5
 }, 500); // Ждем 500ms чтобы все точно загрузилось
+
+// Part5 и Part6 как кнопка для нажатия (весь блок)
+function initButtonHandlers() {
+  const part5 = document.querySelector('.wheel-part5');
+  const part6 = document.querySelector('.wheel-part6');
+  
+  // Добавляем стили для кнопки (БЕЗ изменения размера - размер контролирует GSAP)
+  if (part5 && part6) {
+    [part5, part6].forEach(el => {
+      el.style.cursor = 'pointer';
+      el.style.userSelect = 'none';
+    });
+    
+    // Обработчик клика с анимацией нажатия
+    const handleClick = () => {
+      console.log('Колесо нажато! Запуск вращения...');
+      
+      // Анимация нажатия - кнопка, wheel-wrapper, part4 и arrow уменьшаются
+      const wheelWrapper = document.querySelector('.wheel-wrapper');
+      const part4 = document.querySelector('.wheel-part4');
+      const arrow = document.querySelector('.arrow');
+      
+      gsap.timeline()
+        // Уменьшение при нажатии
+        .to([part5, part6], { duration: 0.1, scale: 0.28 }, 0)
+        .to(wheelWrapper, { duration: 0.1, scale: 0.98 }, 0)
+        .to(part4, { duration: 0.1, scale: 0.98 }, 0)
+        .to(arrow, { duration: 0.1, scale: 0.98 }, 0)
+        // Возврат к нормальному размеру
+        .to([part5, part6], { duration: 0.2, scale: 0.30, ease: "back.out(1.5)" }, 0.1)
+        .to(wheelWrapper, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1)
+        .to(part4, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1)
+        .to(arrow, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1);
+      
+      // Здесь будет логика вращения колеса
+    };
+    
+    part5.addEventListener('click', handleClick);
+    part6.addEventListener('click', handleClick);
+    
+    // Эффект при наведении - увеличиваем кнопку и добавляем мощное сияние part6
+    const handleMouseEnter = (e) => {
+      gsap.to([part5, part6], { duration: 0.2, scale: 0.32 });
+      gsap.to(part6, { duration: 0.2, filter: "drop-shadow(0 0 20px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.5))" });
+    };
+    
+    const handleMouseLeave = (e) => {
+      gsap.to([part5, part6], { duration: 0.2, scale: 0.30 });
+      gsap.to(part6, { duration: 0.2, filter: "drop-shadow(0 0 0px rgba(255, 255, 255, 0))" });
+    };
+    
+    part5.addEventListener('mouseenter', handleMouseEnter);
+    part5.addEventListener('mouseleave', handleMouseLeave);
+    part6.addEventListener('mouseenter', handleMouseEnter);
+    part6.addEventListener('mouseleave', handleMouseLeave);
+  }
+}
 
 // Disable zoom and scroll for all devices including multitouch
 document.addEventListener('touchstart', function(e) {
