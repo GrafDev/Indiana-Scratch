@@ -1,5 +1,6 @@
 import '../css/main.css'
 import { calculateWheelSize, getElementSize } from './config.js'
+import { gsap } from 'gsap'
 
 let devMode = false;
 let gameMode = import.meta.env.VITE_GAME_MODE || 'click';
@@ -198,6 +199,226 @@ applyResponsiveSizing();
 
 // Reapply sizing on window resize
 window.addEventListener('resize', applyResponsiveSizing);
+
+// GSAP Animation system
+function initEntranceAnimations() {
+  const tl = gsap.timeline();
+  
+  // Сначала установим начальные состояния для всех элементов
+  tl.set([
+    '.main-container .man1',
+    '.main-container .man2',
+    '.main-container .logo1', 
+    '.main-container .logo2',
+    '.title',
+    '.wheel-wrapper',
+    '.wheel-part4',
+    '.wheel-part5', 
+    '.wheel-part6',
+    '.arrow'
+  ], { opacity: 0 })
+  
+  // Man1 в main-container - простое fade появление
+  .set('.main-container .man1', {
+    opacity: 0
+  })
+  
+  // Man2 в main-container - простое fade появление
+  .set('.main-container .man2', {
+    opacity: 0
+  })
+  
+  // Logo1 в main-container - простое fade появление
+  .set('.main-container .logo1', {
+    opacity: 0
+  })
+  
+  // Logo2 в main-container - простое fade появление
+  .set('.main-container .logo2', {
+    opacity: 0
+  })
+  
+  // Title - появляется сверху
+  .set('.title', {
+    y: -80,
+    scale: 0.5
+  })
+  
+  // Wheel-wrapper - появляется с центра
+  .set('.wheel-wrapper', {
+    scale: 0.2,
+    rotation: -90
+  })
+  
+  // Part4 - появляется с масштабированием
+  .set('.wheel-part4', {
+    scale: 0
+  })
+  
+  // Part5 - появляется с масштабированием и поворотом
+  .set('.wheel-part5', {
+    scale: 0,
+    rotation: 180
+  })
+  
+  // Part6 - появляется с масштабированием
+  .set('.wheel-part6', {
+    scale: 0
+  })
+  
+  // Arrow - появляется сверху
+  .set('.arrow', {
+    y: -150,
+    scale: 0
+  })
+  
+  // Mans в media-container - начальные состояния с 0
+  .set('.media1 .man1', {
+    x: 0,
+    y: 0,
+    scale: 0,
+    rotationY: 180,
+    rotationZ: 0
+  })
+  .set('.media2 .man2', {
+    x: 0,
+    y: 0,
+    scale: 0,
+    rotationY: -180,
+    rotationZ: 0
+  })
+  
+  // Все анимации появления одновременно (0s)
+  
+  // Title
+  .to('.title', {
+    duration: 0.8,
+    y: 0,
+    scale: 1,
+    opacity: 1,
+    ease: "back.out(1.7)"
+  }, 0)
+  
+  // Wheel-wrapper
+  .to('.wheel-wrapper', {
+    duration: 1.0,
+    scale: 1,
+    rotation: 0,
+    opacity: 1,
+    ease: "back.out(1.5)"
+  }, 0)
+  
+  // Part4 - начальное состояние (будет анимироваться отдельно)
+  .set('.wheel-part4', {
+    scale: 0,
+    opacity: 0
+  })
+  
+  // Part5
+  .to('.wheel-part5', {
+    duration: 0.8,
+    scale: 1,
+    rotation: 0,
+    opacity: 1,
+    ease: "back.out(1.7)"
+  }, 0)
+  
+  // Part6
+  .to('.wheel-part6', {
+    duration: 0.6,
+    scale: 1,
+    opacity: 1,
+    ease: "back.out(1.5)"
+  }, 0)
+  
+  // Arrow
+  .to('.arrow', {
+    duration: 0.7,
+    y: 0,
+    scale: 1,
+    opacity: 1,
+    ease: "bounce.out"
+  }, 0)
+  
+  // Logo1 в main-container - простое fade
+  .to('.main-container .logo1', {
+    duration: 0.8,
+    opacity: 1,
+    ease: "power2.out"
+  }, 0)
+  
+  // Logo2 в main-container - простое fade
+  .to('.main-container .logo2', {
+    duration: 0.8,
+    opacity: 1,
+    ease: "power2.out"
+  }, 0)
+  
+  // Man1 в main-container - простое fade
+  .to('.main-container .man1', {
+    duration: 0.8,
+    opacity: 1,
+    ease: "power2.out"
+  }, 0)
+  
+  // Man2 в main-container - простое fade
+  .to('.main-container .man2', {
+    duration: 0.8,
+    opacity: 1,
+    ease: "power2.out"
+  }, 0)
+  
+  // Mans в media-container - ФАЗА 1 быстрее + ФАЗА 2 медленнее
+  .to('.media1 .man1', {
+    duration: 0.6, // ФАЗА 1: быстрее
+    x: 105, // ФАЗА 1: к позиции +105px
+    y: 0,
+    scale: 0.8,
+    rotationY: 90,
+    opacity: 1,
+    ease: "power2.out"
+  }, 0)
+  .to('.media2 .man2', {
+    duration: 0.6, // ФАЗА 1: быстрее
+    x: -105, // ФАЗА 1: к позиции -105px
+    y: 0,
+    scale: 0.8,
+    rotationY: -90,
+    opacity: 1,
+    ease: "power2.out"
+  }, 0)
+  
+  // ФАЗА 2: медленнее, сразу после первой фазы (0.6s)
+  .to('.media1 .man1', {
+    duration: 1.2, // ФАЗА 2: медленнее
+    x: 0,
+    y: 0,
+    scale: 1,
+    rotationY: 0,
+    ease: "back.out(1.2)"
+  }, 0.6)
+  .to('.media2 .man2', {
+    duration: 1.2, // ФАЗА 2: медленнее
+    x: 0,
+    y: 0,
+    scale: 1,
+    rotationY: 0,
+    ease: "back.out(1.2)"
+  }, 0.6)
+  
+  // Part4 - появляется еще раньше через fade  
+  .to('.wheel-part4', {
+    duration: 0.8,
+    scale: 1,
+    opacity: 1,
+    ease: "power2.out"
+  }, 0.8); // еще раньше - в 0.8s
+}
+
+// Initialize entrance animations AFTER DOM is ready
+setTimeout(() => {
+  initEntranceAnimations();
+}, 500); // Ждем 500ms чтобы все точно загрузилось
 
 // Disable zoom and scroll for all devices including multitouch
 document.addEventListener('touchstart', function(e) {

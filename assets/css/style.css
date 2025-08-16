@@ -145,7 +145,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: scale(0.85);
 }
 
 .man1 {
@@ -345,6 +344,24 @@ h1 {
 
 .read-the-docs {
   color: #888;
+}
+
+/* ANIMATIONS */
+
+/* Initial hidden state - все элементы анимации скрыты до инициализации GSAP */
+.main-container .man1,
+.main-container .man2,
+.main-container .logo1,
+.main-container .logo2,
+.media1 .man1,
+.media2 .man2,
+.title,
+.wheel-wrapper,
+.wheel-part4,
+.wheel-part5,
+.wheel-part6,
+.arrow {
+  opacity: 0;
 }
 
 /* Mobile portrait styles */
