@@ -164,7 +164,14 @@ function applyResponsiveSizing() {
   // Get element sizes
   const logo1Size = getElementSize('logo1');
   const logo2Size = getElementSize('logo2');
-  const manSize = getElementSize('man');
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  const aspectRatio = screenWidth / screenHeight;
+  
+  // Use bigger mans for mobile (both portrait and landscape)
+  const manSize = (aspectRatio < 0.6 || (aspectRatio > 1.6 && Math.min(screenWidth, screenHeight) <= 768)) 
+    ? getElementSize('manMobile') 
+    : getElementSize('man');
   const titleSize = getElementSize('title');
   const wheelElementSize = getElementSize('wheel');
   
@@ -180,19 +187,8 @@ function applyResponsiveSizing() {
   document.documentElement.style.setProperty('--title-height', `${titleSize.height}px`);
   document.documentElement.style.setProperty('--wheel-container-width', `${wheelElementSize.width}px`);
   document.documentElement.style.setProperty('--wheel-container-height', `${wheelElementSize.height}px`);
-  // Set media gap based on device type
-  const screenWidth = window.innerWidth;
-  let mediaGapMultiplier = 1.5; // Default multiplier
-  
-  if (screenWidth > 1024) {
-    // Desktop: slightly larger gap
-    mediaGapMultiplier = 1.6;
-  } else if (screenWidth > 768) {
-    // Tablet: slightly wider gap
-    mediaGapMultiplier = 1.55;
-  }
-  
-  document.documentElement.style.setProperty('--max-media-gap', `${wheelSize * mediaGapMultiplier}px`);
+  // Set default media gap
+  document.documentElement.style.setProperty('--max-media-gap', `${wheelSize * 1.5}px`);
   
   console.log(`Wheel size set to: ${wheelSize}px`);
 }

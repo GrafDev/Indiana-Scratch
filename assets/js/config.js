@@ -31,6 +31,10 @@ export const gameConfig = {
       widthRatio: 0.35,   // 35% of wheel size  
       heightRatio: 0.5,   // 50% of wheel size
     },
+    manMobile: {
+      widthRatio: 0.45,   // 45% of wheel size for mobile
+      heightRatio: 0.6,   // 60% of wheel size for mobile
+    },
     title: {
       widthRatio: 0.8,    // 80% of wheel size
       heightRatio: 0.15,  // 15% of wheel size
@@ -46,26 +50,22 @@ export const gameConfig = {
 export function calculateWheelSize() {
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
+  const aspectRatio = screenWidth / screenHeight;
   
-  // Use smaller dimension and take different percentage based on device
   let availableSpace;
   
-  if (screenWidth <= gameConfig.responsive.mobile.maxWidth) {
-    // Mobile: 80% of smaller dimension
-    availableSpace = Math.min(screenWidth, screenHeight) * 0.8;
+  if (aspectRatio < 0.6) {
+    // Mobile portrait: 80% of screen width
+    availableSpace = screenWidth * 0.8;
   } else {
     // Tablet/Desktop: 90% of smaller dimension
     availableSpace = Math.min(screenWidth, screenHeight) * 0.9;
-  }
-  
-  // Apply size reduction for non-mobile devices
-  if (screenWidth > gameConfig.responsive.mobile.maxWidth) {
-    // Reduce wheel size for tablet and desktop
-    if (screenWidth <= gameConfig.responsive.tablet.maxWidth) {
-      // Tablet: reduce to 90% of calculated size
+    
+    if (aspectRatio >= 0.6 && aspectRatio < 1.3) {
+      // Tablet: reduce to 90%
       availableSpace = availableSpace * 0.9;
-    } else {
-      // Desktop: reduce to 80% of calculated size
+    } else if (aspectRatio >= 1.3) {
+      // Desktop: reduce to 80%
       availableSpace = availableSpace * 0.8;
     }
   }
