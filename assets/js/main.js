@@ -12,12 +12,18 @@ document.querySelector('#app').innerHTML = `
       <div class="logo2"><img src="/assets/images/logo2.png" alt="Logo 2"></div>
       <div class="title"></div>
       <div class="man1"></div>
-      <div class="wheel-wrapper">
-        <div class="wheel-part1"></div>
-        <div class="wheel-part2"></div>
-        <div class="wheel-part3"></div>
-        <div class="wheel-text1"></div>
-        <div class="wheel-text2"></div>
+      <div class="wheel-container">
+        <div class="wheel-wrapper">
+          <div class="wheel-part1"></div>
+          <div class="wheel-part2"></div>
+          <div class="wheel-part3"></div>
+          <div class="wheel-text1"></div>
+          <div class="wheel-text2"></div>
+        </div>
+        <div class="wheel-part4"></div>
+        <div class="wheel-part5"></div>
+        <div class="wheel-part6"></div>
+        <div class="arrow"></div>
       </div>
       <div class="man2"></div>
     </div>
@@ -172,8 +178,8 @@ function applyResponsiveSizing() {
   document.documentElement.style.setProperty('--man-height', `${manSize.height}px`);
   document.documentElement.style.setProperty('--title-width', `${titleSize.width}px`);
   document.documentElement.style.setProperty('--title-height', `${titleSize.height}px`);
-  document.documentElement.style.setProperty('--wheel-wrapper-width', `${wheelElementSize.width}px`);
-  document.documentElement.style.setProperty('--wheel-wrapper-height', `${wheelElementSize.height}px`);
+  document.documentElement.style.setProperty('--wheel-container-width', `${wheelElementSize.width}px`);
+  document.documentElement.style.setProperty('--wheel-container-height', `${wheelElementSize.height}px`);
   // Set media gap based on device type
   const screenWidth = window.innerWidth;
   let mediaGapMultiplier = 1.5; // Default multiplier

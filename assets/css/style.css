@@ -103,6 +103,7 @@ body {
   .logo1, .logo2 {
     padding: 10px;
   }
+  
 }
 
 .logo1 img {
@@ -207,12 +208,18 @@ body {
   padding: 20px;
 }
 
-.wheel-wrapper {
-  width: var(--wheel-wrapper-width, 300px);
-  height: var(--wheel-wrapper-height, 300px);
+.wheel-container {
+  width: var(--wheel-container-width, 300px);
+  height: var(--wheel-container-height, 300px);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+.wheel-wrapper {
+  width: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
+  height: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
   position: relative;
 }
 
@@ -250,6 +257,62 @@ body {
 .wheel-text2 {
   background-image: url('/assets/images/wheel-text2.png');
   z-index: 5;
+}
+
+.wheel-part4 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
+  height: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
+  background-image: url('/assets/images/wheel-part4.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 6;
+}
+
+.wheel-part5 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
+  height: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
+  background-image: url('/assets/images/wheel-part5.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 7;
+}
+
+.wheel-part6 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
+  height: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
+  background-image: url('/assets/images/wheel-part6.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 8;
+}
+
+.arrow {
+  position: absolute;
+  top: calc(var(--wheel-container-height, 300px) / -30);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(var(--wheel-container-width, 300px) / 8);
+  height: calc(var(--wheel-container-height, 300px) / 8);
+  background-image: url('/assets/images/arrow.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 9999;
 }
 
 

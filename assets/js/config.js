@@ -47,8 +47,16 @@ export function calculateWheelSize() {
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
   
-  // Use smaller dimension and take 90% to leave some padding
-  let availableSpace = Math.min(screenWidth, screenHeight) * 0.9;
+  // Use smaller dimension and take different percentage based on device
+  let availableSpace;
+  
+  if (screenWidth <= gameConfig.responsive.mobile.maxWidth) {
+    // Mobile: 80% of smaller dimension
+    availableSpace = Math.min(screenWidth, screenHeight) * 0.8;
+  } else {
+    // Tablet/Desktop: 90% of smaller dimension
+    availableSpace = Math.min(screenWidth, screenHeight) * 0.9;
+  }
   
   // Apply size reduction for non-mobile devices
   if (screenWidth > gameConfig.responsive.mobile.maxWidth) {
