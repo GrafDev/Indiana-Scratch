@@ -19,9 +19,13 @@ export const gameConfig = {
   
   // Element size ratios relative to wheel size
   elements: {
-    logo: {
-      widthRatio: 0.25,   // 25% of wheel size
-      heightRatio: 0.25,  // 25% of wheel size
+    logo1: {
+      widthRatio: 0.35,   // 35% of wheel size
+      heightRatio: 0.35,  // 35% of wheel size
+    },
+    logo2: {
+      widthRatio: 0.35,   // 35% of wheel size
+      heightRatio: 0.35,  // 35% of wheel size
     },
     man: {
       widthRatio: 0.35,   // 35% of wheel size  
@@ -44,7 +48,19 @@ export function calculateWheelSize() {
   const screenHeight = window.innerHeight;
   
   // Use smaller dimension and take 90% to leave some padding
-  const availableSpace = Math.min(screenWidth, screenHeight) * 0.9;
+  let availableSpace = Math.min(screenWidth, screenHeight) * 0.9;
+  
+  // Apply size reduction for non-mobile devices
+  if (screenWidth > gameConfig.responsive.mobile.maxWidth) {
+    // Reduce wheel size for tablet and desktop
+    if (screenWidth <= gameConfig.responsive.tablet.maxWidth) {
+      // Tablet: reduce to 90% of calculated size
+      availableSpace = availableSpace * 0.9;
+    } else {
+      // Desktop: reduce to 80% of calculated size
+      availableSpace = availableSpace * 0.8;
+    }
+  }
   
   return Math.round(availableSpace);
 }

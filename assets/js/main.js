@@ -8,26 +8,29 @@ const isDevelopment = import.meta.env.DEV;
 document.querySelector('#app').innerHTML = `
   <div class="bg-container">
     <div class="main-container">
-      <div class="logo1"></div>
-      <div class="logo2"></div>
+      <div class="logo1"><img src="/assets/images/logo1.png" alt="Logo 1"></div>
+      <div class="logo2"><img src="/assets/images/logo2.png" alt="Logo 2"></div>
       <div class="title"></div>
       <div class="man1"></div>
       <div class="wheel-wrapper">
         <div class="wheel-part1"></div>
         <div class="wheel-part2"></div>
         <div class="wheel-part3"></div>
-        <div class="wheel-text"></div>
+        <div class="wheel-text1"></div>
+        <div class="wheel-text2"></div>
       </div>
       <div class="man2"></div>
     </div>
     <div class="media-container">
       <div class="media1">
-        <div class="logo1"></div>
+        <div class="logo1"><img src="/assets/images/logo1.png" alt="Logo 1"></div>
         <div class="man1"></div>
+        <div class="spacer"></div>
       </div>
       <div class="media2">
-        <div class="logo2"></div>
+        <div class="logo2"><img src="/assets/images/logo2.png" alt="Logo 2"></div>
         <div class="man2"></div>
+        <div class="spacer"></div>
       </div>
     </div>
   </div>
@@ -153,21 +156,37 @@ function applyResponsiveSizing() {
   const wheelSize = calculateWheelSize();
   
   // Get element sizes
-  const logoSize = getElementSize('logo');
+  const logo1Size = getElementSize('logo1');
+  const logo2Size = getElementSize('logo2');
   const manSize = getElementSize('man');
   const titleSize = getElementSize('title');
   const wheelElementSize = getElementSize('wheel');
   
   // Set CSS custom properties
   document.documentElement.style.setProperty('--wheel-size', `${wheelSize}px`);
-  document.documentElement.style.setProperty('--logo-width', `${logoSize.width}px`);
-  document.documentElement.style.setProperty('--logo-height', `${logoSize.height}px`);
+  document.documentElement.style.setProperty('--logo1-width', `${logo1Size.width}px`);
+  document.documentElement.style.setProperty('--logo1-height', `${logo1Size.height}px`);
+  document.documentElement.style.setProperty('--logo2-width', `${logo2Size.width}px`);
+  document.documentElement.style.setProperty('--logo2-height', `${logo2Size.height}px`);
   document.documentElement.style.setProperty('--man-width', `${manSize.width}px`);
   document.documentElement.style.setProperty('--man-height', `${manSize.height}px`);
   document.documentElement.style.setProperty('--title-width', `${titleSize.width}px`);
   document.documentElement.style.setProperty('--title-height', `${titleSize.height}px`);
   document.documentElement.style.setProperty('--wheel-wrapper-width', `${wheelElementSize.width}px`);
   document.documentElement.style.setProperty('--wheel-wrapper-height', `${wheelElementSize.height}px`);
+  // Set media gap based on device type
+  const screenWidth = window.innerWidth;
+  let mediaGapMultiplier = 1.5; // Default multiplier
+  
+  if (screenWidth > 1024) {
+    // Desktop: slightly larger gap
+    mediaGapMultiplier = 1.6;
+  } else if (screenWidth > 768) {
+    // Tablet: slightly wider gap
+    mediaGapMultiplier = 1.55;
+  }
+  
+  document.documentElement.style.setProperty('--max-media-gap', `${wheelSize * mediaGapMultiplier}px`);
   
   console.log(`Wheel size set to: ${wheelSize}px`);
 }
