@@ -35,20 +35,20 @@ document.querySelector('#app').innerHTML = `
       <div class="man2"></div>
     </div>
     <div class="media-container">
-      <div class="media1">
-        <div class="logo1">
+      <div class="box1">
+        <div class="box-logo1">
           <img src="/assets/images/logo1-part1.png" alt="Logo 1 Part 1" class="logo1-part1">
           <img src="/assets/images/logo1-part2.png" alt="Logo 1 Part 2" class="logo1-part2">
         </div>
-        <div class="man1"></div>
+        <div class="box-man1"></div>
         <div class="spacer"></div>
       </div>
-      <div class="media2">
-        <div class="logo2">
+      <div class="box2">
+        <div class="box-logo2">
           <img src="/assets/images/logo2-part1.png" alt="Logo 2 Part 1" class="logo2-part1">
           <img src="/assets/images/logo2-part2.png" alt="Logo 2 Part 2" class="logo2-part2">
         </div>
-        <div class="man2"></div>
+        <div class="box-man2"></div>
         <div class="spacer"></div>
       </div>
     </div>
@@ -188,6 +188,10 @@ function applyResponsiveSizing() {
   const titleSize = getElementSize('title');
   const wheelElementSize = getElementSize('wheel');
   
+  // Get main-container width
+  const mainContainer = document.querySelector('.main-container');
+  const mainContainerWidth = mainContainer.offsetWidth;
+  
   // Set CSS custom properties
   document.documentElement.style.setProperty('--wheel-size', `${wheelSize}px`);
   document.documentElement.style.setProperty('--logo1-width', `${logo1Size.width}px`);
@@ -201,9 +205,10 @@ function applyResponsiveSizing() {
   document.documentElement.style.setProperty('--wheel-container-width', `${wheelElementSize.width}px`);
   document.documentElement.style.setProperty('--wheel-container-height', `${wheelElementSize.height}px`);
   // Set default media gap
-  document.documentElement.style.setProperty('--max-media-gap', `${wheelSize * 1.5}px`);
+  document.documentElement.style.setProperty('--max-media-gap', `${wheelSize * 1.4}px`);
   
   console.log(`Wheel size set to: ${wheelSize}px`);
+  console.log(`Main container width: ${mainContainerWidth}px`);
 }
 
 // Apply sizing on load
@@ -282,27 +287,29 @@ function initEntranceAnimations() {
     scale: 0
   })
   
-  // Mans в media-container - начальные состояния с 0
-  .set('.media1 .man1', {
-    x: 0,
+  // Mans в media-container - начальные состояния изза экрана
+  .set('.box1 .box-man1', {
+    x: -300, // За левым краем экрана
     y: 0,
-    scale: 0,
+    scale: 0.3,
     rotationY: 180,
-    rotationZ: 0
+    rotationZ: 0,
+    opacity: 0
   })
-  .set('.media2 .man2', {
-    x: 0,
+  .set('.box2 .box-man2', {
+    x: 300, // За правым краем экрана
     y: 0,
-    scale: 0,
+    scale: 0.3,
     rotationY: -180,
-    rotationZ: 0
+    rotationZ: 0,
+    opacity: 0
   })
   
   // Логотипы в media-container - начальные состояния
-  .set('.media1 .logo1', {
+  .set('.box1 .box-logo1', {
     opacity: 0
   })
-  .set('.media2 .logo2', {
+  .set('.box2 .box-logo2', {
     opacity: 0
   })
   
@@ -386,43 +393,61 @@ function initEntranceAnimations() {
     ease: "power2.out"
   }, 0)
   
-  // Mans в media-container - ФАЗА 1 быстрее + ФАЗА 2 медленнее
-  .to('.media1 .man1', {
-    duration: 0.6, // ФАЗА 1: быстрее
-    x: 105, // ФАЗА 1: к позиции +105px
+  // Mans в media-container - ФАЗА 1: летят изза экрана к начальной позиции
+  .to('.box1 .box-man1', {
+    duration: 0.4, // ФАЗА 1: быстрее
+    x: 0, // ФАЗА 1: к начальной позиции
+    y: 0,
+    scale: 0.3,
+    rotationY: 180,
+    opacity: 1,
+    ease: "none"
+  }, 0)
+  .to('.box2 .box-man2', {
+    duration: 0.4, // ФАЗА 1: быстрее
+    x: 0, // ФАЗА 1: к начальной позиции
+    y: 0,
+    scale: 0.3,
+    rotationY: -180,
+    opacity: 1,
+    ease: "none"
+  }, 0)
+  
+  // ФАЗА 2: к промежуточной позиции (точно в 0.4s)
+  .to('.box1 .box-man1', {
+    duration: 0.6,
+    x: 105,
     y: 0,
     scale: 0.8,
     rotationY: 90,
-    opacity: 1,
     ease: "power2.out"
-  }, 0)
-  .to('.media2 .man2', {
-    duration: 0.6, // ФАЗА 1: быстрее
-    x: -105, // ФАЗА 1: к позиции -105px
+  }, 0.4)
+  .to('.box2 .box-man2', {
+    duration: 0.6,
+    x: -105,
     y: 0,
     scale: 0.8,
     rotationY: -90,
-    opacity: 1,
     ease: "power2.out"
-  }, 0)
+  }, 0.4)
   
-  // ФАЗА 2: медленнее, сразу после первой фазы (0.6s)
-  .to('.media1 .man1', {
-    duration: 1.2, // ФАЗА 2: медленнее
+  // ФАЗА 3: к финальной позиции (точно в 1.0s)
+  .to('.box1 .box-man1', {
+    duration: 1.2,
     x: 0,
     y: 0,
     scale: 1,
     rotationY: 0,
     ease: "back.out(1.2)"
-  }, 0.6)
-  .to('.media2 .man2', {
-    duration: 1.2, // ФАЗА 2: медленнее
+  }, 1.0)
+  .to('.box2 .box-man2', {
+    duration: 1.2,
     x: 0,
     y: 0,
     scale: 1,
     rotationY: 0,
     ease: "back.out(1.2)"
-  }, 0.6)
+  }, 1.0)
   
   // Part4 - появляется еще раньше через fade  
   .to('.wheel-part4', {
@@ -433,12 +458,12 @@ function initEntranceAnimations() {
   }, 0.8) // еще раньше - в 0.8s
   
   // Логотипы в media-container - fade появление
-  .to('.media1 .logo1', {
+  .to('.box1 .box-logo1', {
     duration: 0.8,
     opacity: 1,
     ease: "power2.out"
   }, 0)
-  .to('.media2 .logo2', {
+  .to('.box2 .box-logo2', {
     duration: 0.8,
     opacity: 1,
     ease: "power2.out"
@@ -448,6 +473,7 @@ function initEntranceAnimations() {
 // Initialize entrance animations AFTER DOM is ready
 setTimeout(() => {
   initEntranceAnimations();
+  
   
   // Инициализируем кнопки после завершения анимации part5
   setTimeout(() => {
