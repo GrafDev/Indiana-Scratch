@@ -2,6 +2,19 @@ export const gameConfig = {
   // Base wheel size coefficient (300px base)
   baseWheelSize: 300,
   
+  // Wheel spinning configuration
+  spinning: {
+    // Array of target sectors (0-11) for each spin
+    targetSectors: [11, 8],
+    currentSpinIndex: 0,
+    sectorAngle: 360 / 12, // degrees per sector (12 sectors total)
+    baseDuration: 3, // base animation duration in seconds
+    minRotations: 3, // minimum number of full rotations
+    maxRotations: 5, // maximum number of full rotations
+    currentSector: 0, // current sector position (starts at 0)
+    isSpinning: false // flag to prevent multiple spins
+  },
+  
   // Responsive breakpoints and multipliers
   responsive: {
     mobile: {
@@ -87,4 +100,36 @@ export function getElementSize(elementType) {
     width: Math.round(wheelSize * elementConfig.widthRatio),
     height: Math.round(wheelSize * elementConfig.heightRatio)
   };
+}
+
+// Calculate rotation angle to reach target sector
+export function calculateRotationAngle(targetSector, currentTotalRotation = 0) {
+  const config = gameConfig.spinning;
+  const currentRotation = config.currentSector * config.sectorAngle;
+  const targetRotation = targetSector * config.sectorAngle;
+  
+  // Calculate angle difference
+  let angleDifference = targetRotation - currentRotation;
+  
+  // Random number of FULL rotations between min and max (integer values only)
+  const randomFullRotations = Math.floor(Math.random() * (config.maxRotations - config.minRotations + 1)) + config.minRotations;
+  const fullRotations = randomFullRotations * 360;
+  
+  // Calculate final angle: current total rotation + full rotations + angle to target
+  const finalAngle = currentTotalRotation + fullRotations + angleDifference;
+  
+  return finalAngle;
+}
+
+// Get next target sector and increment index
+export function getNextTargetSector() {
+  const config = gameConfig.spinning;
+  if (config.currentSpinIndex >= config.targetSectors.length) {
+    return null; // No more spins available
+  }
+  
+  const targetSector = config.targetSectors[config.currentSpinIndex];
+  config.currentSpinIndex++;
+  
+  return targetSector;
 }

@@ -1,5 +1,5 @@
 import '../css/main.css'
-import { calculateWheelSize, getElementSize } from './config.js'
+import { calculateWheelSize, getElementSize, gameConfig, calculateRotationAngle, getNextTargetSector } from './config.js'
 import { gsap } from 'gsap'
 
 let devMode = false;
@@ -495,7 +495,24 @@ function initButtonHandlers() {
     
     // Обработчик клика с анимацией нажатия
     const handleClick = () => {
-      console.log('Колесо нажато! Запуск вращения...');
+      // Check if already spinning
+      if (gameConfig.spinning.isSpinning) {
+        console.log('Колесо уже вращается!');
+        return;
+      }
+      
+      // Get next target sector
+      const targetSector = getNextTargetSector();
+      if (targetSector === null) {
+        console.log('Все вращения завершены!');
+        return;
+      }
+      
+      console.log(`Колесо нажато! Запуск вращения к сектору ${targetSector}...`);
+      
+      
+      // Set spinning flag
+      gameConfig.spinning.isSpinning = true;
       
       // Анимация нажатия - кнопка, wheel-wrapper, part4 и arrow уменьшаются
       const wheelWrapper = document.querySelector('.wheel-wrapper');
@@ -512,9 +529,13 @@ function initButtonHandlers() {
         .to([part5, part6], { duration: 0.2, scale: 0.30, ease: "back.out(1.5)" }, 0.1)
         .to(wheelWrapper, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1)
         .to(part4, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1)
-        .to(arrow, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1);
-      
-      // Здесь будет логика вращения колеса
+        .to(arrow, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1)
+        // Start wheel spinning after press animation
+        .call(() => {
+          spinWheel(targetSector);
+        }, [], 0.3)
+        // Scale down part4 during spinning
+        .to(part4, { duration: 0.3, scale: 0.1, ease: "power2.out" }, 0.3);
     };
     
     part5.addEventListener('click', handleClick);
@@ -536,6 +557,83 @@ function initButtonHandlers() {
     part6.addEventListener('mouseenter', handleMouseEnter);
     part6.addEventListener('mouseleave', handleMouseLeave);
   }
+}
+
+// Variable to store pulsing animation
+let part4PulsingAnimation = null;
+
+// Start part4 pulsing animation
+function startPart4Pulsing() {
+  const part4 = document.querySelector('.wheel-part4');
+  
+  // Stop any existing pulsing
+  if (part4PulsingAnimation) {
+    part4PulsingAnimation.kill();
+  }
+  
+  // Create infinite pulsing animation
+  part4PulsingAnimation = gsap.to(part4, {
+    filter: "brightness(1.8)",
+    duration: 0.4,
+    ease: "power1.inOut",
+    yoyo: true,
+    repeat: -1
+  });
+}
+
+// Stop part4 pulsing animation
+function stopPart4Pulsing() {
+  if (part4PulsingAnimation) {
+    part4PulsingAnimation.kill();
+    part4PulsingAnimation = null;
+    
+    // Reset to normal brightness
+    const part4 = document.querySelector('.wheel-part4');
+    gsap.set(part4, { filter: "brightness(1)" });
+  }
+}
+
+// Wheel spinning animation function
+function spinWheel(targetSector) {
+  const wheelWrapper = document.querySelector('.wheel-wrapper');
+  const config = gameConfig.spinning;
+  
+  // Get current total rotation from wheel element
+  const currentTotalRotation = gsap.getProperty(wheelWrapper, "rotation") || 0;
+  
+  // Calculate rotation angle
+  const finalAngle = calculateRotationAngle(targetSector, currentTotalRotation);
+  
+  console.log(`Вращение колеса: от сектора ${config.currentSector} к сектору ${targetSector}`);
+  console.log(`Текущий поворот: ${currentTotalRotation} градусов`);
+  console.log(`Финальный угол поворота: ${finalAngle} градусов`);
+  
+  // Create spinning animation
+  gsap.to(wheelWrapper, {
+    rotation: finalAngle,
+    duration: config.baseDuration,
+    ease: "power2.out",
+    onComplete: () => {
+      // Update current sector
+      config.currentSector = targetSector;
+      config.isSpinning = false;
+      
+      console.log(`Колесо остановилось на секторе ${targetSector}`);
+      
+      // Scale part4 back to normal when wheel stops with brightness flash
+      const part4 = document.querySelector('.wheel-part4');
+      gsap.timeline()
+        .to(part4, { duration: 0.1, scale: 1, filter: "brightness(2)", ease: "power2.out" })
+        .to(part4, { duration: 0.2, filter: "brightness(1)", ease: "power2.out" });
+      
+      // Check if more spins are available
+      if (config.currentSpinIndex >= config.targetSectors.length) {
+        console.log('Все запланированные вращения завершены!');
+      } else {
+        console.log(`Осталось вращений: ${config.targetSectors.length - config.currentSpinIndex}`);
+      }
+    }
+  });
 }
 
 // Disable zoom and scroll for all devices including multitouch
