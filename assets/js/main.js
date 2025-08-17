@@ -523,19 +523,13 @@ function initButtonHandlers() {
         // Уменьшение при нажатии
         .to([part5, part6], { duration: 0.1, scale: 0.28 }, 0)
         .to(wheelWrapper, { duration: 0.1, scale: 0.98 }, 0)
-        .to(part4, { duration: 0.1, scale: 0.98 }, 0)
-        .to(arrow, { duration: 0.1, scale: 0.98 }, 0)
-        // Возврат к нормальному размеру
-        .to([part5, part6], { duration: 0.2, scale: 0.30, ease: "back.out(1.5)" }, 0.1)
-        .to(wheelWrapper, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1)
-        .to(part4, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1)
-        .to(arrow, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1)
-        // Start wheel spinning after press animation
+        .to(part4, { duration: 0.1, scale: 0.1 }, 0)
+        // Start wheel spinning when button is fully pressed
         .call(() => {
           spinWheel(targetSector);
-        }, [], 0.3)
-        // Scale down part4 during spinning
-        .to(part4, { duration: 0.3, scale: 0.1, ease: "power2.out" }, 0.3);
+        }, [], 0.1)
+        // Return wheel-wrapper to normal size
+        .to(wheelWrapper, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1);
     };
     
     part5.addEventListener('click', handleClick);
@@ -543,11 +537,17 @@ function initButtonHandlers() {
     
     // Эффект при наведении - увеличиваем кнопку и добавляем мощное сияние part6
     const handleMouseEnter = (e) => {
+      // Don't apply hover effects during spinning
+      if (gameConfig.spinning.isSpinning) return;
+      
       gsap.to([part5, part6], { duration: 0.2, scale: 0.32 });
       gsap.to(part6, { duration: 0.2, filter: "drop-shadow(0 0 20px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.5))" });
     };
     
     const handleMouseLeave = (e) => {
+      // Don't apply hover effects during spinning
+      if (gameConfig.spinning.isSpinning) return;
+      
       gsap.to([part5, part6], { duration: 0.2, scale: 0.30 });
       gsap.to(part6, { duration: 0.2, filter: "drop-shadow(0 0 0px rgba(255, 255, 255, 0))" });
     };
@@ -622,8 +622,14 @@ function spinWheel(targetSector) {
       
       // Scale part4 back to normal when wheel stops with brightness flash
       const part4 = document.querySelector('.wheel-part4');
+      const part5 = document.querySelector('.wheel-part5');
+      const part6 = document.querySelector('.wheel-part6');
+      const wheelWrapper = document.querySelector('.wheel-wrapper');
+      const arrow = document.querySelector('.arrow');
+      
       gsap.timeline()
         .to(part4, { duration: 0.1, scale: 1, filter: "brightness(2)", ease: "power2.out" })
+        .to([part5, part6], { duration: 0.5, scale: 0.30, ease: "back.out(1.5)" }, 0)
         .to(part4, { duration: 0.2, filter: "brightness(1)", ease: "power2.out" });
       
       // Check if more spins are available
