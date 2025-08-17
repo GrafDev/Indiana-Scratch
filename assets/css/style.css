@@ -94,10 +94,6 @@ body {
   padding-right: 20px;
 }
 
-.logo1, .logo2 {
-  display: inline-block;
-  padding: 20px;
-}
 
 
 /* Tablet styles */
@@ -124,16 +120,46 @@ body {
   }
 }
 
-.logo1 img {
+.logo1 {
+  display: inline-block;
+  position: relative;
   width: var(--logo1-width, 20vw);
+  height: auto;
+  padding: 20px;
+}
+
+.logo1 img {
+  width: 100%;
   height: auto;
   display: block;
 }
 
-.logo2 img {
+.logo1-part1,
+.logo1-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.logo2 {
+  display: inline-block;
+  position: relative;
   width: var(--logo2-width, 30vw);
   height: auto;
+  padding: 20px;
+}
+
+.logo2 img {
+  width: 100%;
+  height: auto;
   display: block;
+}
+
+.logo2-part1,
+.logo2-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .man1, .man2 {

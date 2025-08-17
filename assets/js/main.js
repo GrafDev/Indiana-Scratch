@@ -9,8 +9,14 @@ const isDevelopment = import.meta.env.DEV;
 document.querySelector('#app').innerHTML = `
   <div class="bg-container">
     <div class="main-container">
-      <div class="logo1"><img src="/assets/images/logo1.png" alt="Logo 1"></div>
-      <div class="logo2"><img src="/assets/images/logo2.png" alt="Logo 2"></div>
+      <div class="logo1">
+        <img src="/assets/images/logo1-part1.png" alt="Logo 1 Part 1" class="logo1-part1">
+        <img src="/assets/images/logo1-part2.png" alt="Logo 1 Part 2" class="logo1-part2">
+      </div>
+      <div class="logo2">
+        <img src="/assets/images/logo2-part1.png" alt="Logo 2 Part 1" class="logo2-part1">
+        <img src="/assets/images/logo2-part2.png" alt="Logo 2 Part 2" class="logo2-part2">
+      </div>
       <div class="title"></div>
       <div class="man1"></div>
       <div class="wheel-container">
@@ -30,12 +36,18 @@ document.querySelector('#app').innerHTML = `
     </div>
     <div class="media-container">
       <div class="media1">
-        <div class="logo1"><img src="/assets/images/logo1.png" alt="Logo 1"></div>
+        <div class="logo1">
+          <img src="/assets/images/logo1-part1.png" alt="Logo 1 Part 1" class="logo1-part1">
+          <img src="/assets/images/logo1-part2.png" alt="Logo 1 Part 2" class="logo1-part2">
+        </div>
         <div class="man1"></div>
         <div class="spacer"></div>
       </div>
       <div class="media2">
-        <div class="logo2"><img src="/assets/images/logo2.png" alt="Logo 2"></div>
+        <div class="logo2">
+          <img src="/assets/images/logo2-part1.png" alt="Logo 2 Part 1" class="logo2-part1">
+          <img src="/assets/images/logo2-part2.png" alt="Logo 2 Part 2" class="logo2-part2">
+        </div>
         <div class="man2"></div>
         <div class="spacer"></div>
       </div>
@@ -228,12 +240,10 @@ function initEntranceAnimations() {
     opacity: 0
   })
   
-  // Logo1 в main-container - простое fade появление
+  // Logo1 и Logo2 в main-container - начальные значения
   .set('.main-container .logo1', {
     opacity: 0
   })
-  
-  // Logo2 в main-container - простое fade появление
   .set('.main-container .logo2', {
     opacity: 0
   })
@@ -288,6 +298,14 @@ function initEntranceAnimations() {
     rotationZ: 0
   })
   
+  // Логотипы в media-container - начальные состояния
+  .set('.media1 .logo1', {
+    opacity: 0
+  })
+  .set('.media2 .logo2', {
+    opacity: 0
+  })
+  
   // Все анимации появления одновременно (0s)
   
   // Title
@@ -340,14 +358,14 @@ function initEntranceAnimations() {
     ease: "bounce.out"
   }, 0)
   
-  // Logo1 в main-container - простое fade
+  // Logo1 в main-container - fade появление
   .to('.main-container .logo1', {
     duration: 0.8,
     opacity: 1,
     ease: "power2.out"
   }, 0)
   
-  // Logo2 в main-container - простое fade
+  // Logo2 в main-container - fade появление
   .to('.main-container .logo2', {
     duration: 0.8,
     opacity: 1,
@@ -412,7 +430,19 @@ function initEntranceAnimations() {
     scale: 1,
     opacity: 1,
     ease: "power2.out"
-  }, 0.8); // еще раньше - в 0.8s
+  }, 0.8) // еще раньше - в 0.8s
+  
+  // Логотипы в media-container - fade появление
+  .to('.media1 .logo1', {
+    duration: 0.8,
+    opacity: 1,
+    ease: "power2.out"
+  }, 0)
+  .to('.media2 .logo2', {
+    duration: 0.8,
+    opacity: 1,
+    ease: "power2.out"
+  }, 0);
 }
 
 // Initialize entrance animations AFTER DOM is ready
