@@ -2,6 +2,28 @@ import '../css/main.css'
 import { calculateWheelSize, getElementSize, gameConfig, calculateRotationAngle, getNextTargetSector } from './config.js'
 import { gsap } from 'gsap'
 
+// Import images using Vite
+import bgMainImg from '../images/bg-main.png'
+import bgMobileImg from '../images/bg-mobile.png'
+import bgModalImg from '../images/bg-modal.png'
+import buttonModalImg from '../images/button-modal.png'
+import logo1Part1Img from '../images/logo1-part1.png'
+import logo1Part2Img from '../images/logo1-part2.png'
+import logo2Part1Img from '../images/logo2-part1.png'
+import logo2Part2Img from '../images/logo2-part2.png'
+import man1Img from '../images/man1.png'
+import man2Img from '../images/man2.png'
+import titleImg from '../images/title.png'
+import wheelPart1Img from '../images/wheel-part1.png'
+import wheelPart2Img from '../images/wheel-part2.png'
+import wheelPart3Img from '../images/wheel-part3.png'
+import wheelPart4Img from '../images/wheel-part4.png'
+import wheelPart5Img from '../images/wheel-part5.png'
+import wheelPart6Img from '../images/wheel-part6.png'
+import wheelText1Img from '../images/wheel-text1.png'
+import wheelText2Img from '../images/wheel-text2.png'
+import arrowImg from '../images/arrow.png'
+
 let devMode = false;
 let gameMode = import.meta.env.VITE_GAME_MODE || 'click';
 const isDevelopment = import.meta.env.DEV;
@@ -10,12 +32,12 @@ document.querySelector('#app').innerHTML = `
   <div class="bg-container">
     <div class="main-container">
       <div class="logo1">
-        <img src="/assets/images/logo1-part1.png" alt="Logo 1 Part 1" class="logo1-part1">
-        <img src="/assets/images/logo1-part2.png" alt="Logo 1 Part 2" class="logo1-part2">
+        <img src="${logo1Part1Img}" alt="Logo 1 Part 1" class="logo1-part1">
+        <img src="${logo1Part2Img}" alt="Logo 1 Part 2" class="logo1-part2">
       </div>
       <div class="logo2">
-        <img src="/assets/images/logo2-part1.png" alt="Logo 2 Part 1" class="logo2-part1">
-        <img src="/assets/images/logo2-part2.png" alt="Logo 2 Part 2" class="logo2-part2">
+        <img src="${logo2Part1Img}" alt="Logo 2 Part 1" class="logo2-part1">
+        <img src="${logo2Part2Img}" alt="Logo 2 Part 2" class="logo2-part2">
       </div>
       <div class="title"></div>
       <div class="man1"></div>
@@ -37,16 +59,16 @@ document.querySelector('#app').innerHTML = `
     <div class="media-container">
       <div class="box1">
         <div class="box-logo1">
-          <img src="/assets/images/logo1-part1.png" alt="Logo 1 Part 1" class="logo1-part1">
-          <img src="/assets/images/logo1-part2.png" alt="Logo 1 Part 2" class="logo1-part2">
+          <img src="${logo1Part1Img}" alt="Logo 1 Part 1" class="logo1-part1">
+          <img src="${logo1Part2Img}" alt="Logo 1 Part 2" class="logo1-part2">
         </div>
         <div class="box-man1"></div>
         <div class="spacer"></div>
       </div>
       <div class="box2">
         <div class="box-logo2">
-          <img src="/assets/images/logo2-part1.png" alt="Logo 2 Part 1" class="logo2-part1">
-          <img src="/assets/images/logo2-part2.png" alt="Logo 2 Part 2" class="logo2-part2">
+          <img src="${logo2Part1Img}" alt="Logo 2 Part 1" class="logo2-part1">
+          <img src="${logo2Part2Img}" alt="Logo 2 Part 2" class="logo2-part2">
         </div>
         <div class="box-man2"></div>
         <div class="spacer"></div>
@@ -57,12 +79,14 @@ document.querySelector('#app').innerHTML = `
   <div class="dev-panel" id="devPanel" style="display: none;">
     <div class="dev-section">
       <h4>Game Mode</h4>
-      <label>
-        <input type="radio" name="gameMode" value="click" id="clickMode"> Click Mode
-      </label>
-      <label>
-        <input type="radio" name="gameMode" value="auto" id="autoMode"> Auto Mode
-      </label>
+      <div class="mode-switcher">
+        <span class="mode-label">Click</span>
+        <label class="switch">
+          <input type="checkbox" id="modeSwitcher">
+          <span class="slider"></span>
+        </label>
+        <span class="mode-label">Auto</span>
+      </div>
     </div>
     <div class="dev-section">
       <h4>Debug</h4>
@@ -80,8 +104,7 @@ if (isDevelopment) {
   const devToggle = document.getElementById('devToggle');
   const devPanel = document.getElementById('devPanel');
   const showBordersCheckbox = document.getElementById('showBorders');
-  const clickModeRadio = document.getElementById('clickMode');
-  const autoModeRadio = document.getElementById('autoMode');
+  const modeSwitcher = document.getElementById('modeSwitcher');
 
   devToggle.addEventListener('click', () => {
     devMode = !devMode;
@@ -89,12 +112,8 @@ if (isDevelopment) {
     updateGameMode();
   });
 
-  // Initialize current mode
-  if (gameMode === 'click') {
-    clickModeRadio.checked = true;
-  } else {
-    autoModeRadio.checked = true;
-  }
+  // Initialize switcher based on current mode
+  modeSwitcher.checked = gameMode === 'auto';
 
   devToggle.textContent = `DEV (${gameMode.toUpperCase()})`;
 
@@ -106,20 +125,16 @@ if (isDevelopment) {
     }
   });
 
-  // Game mode change handlers
-  clickModeRadio.addEventListener('change', (e) => {
-    if (e.target.checked) {
-      gameMode = 'click';
-      updateGameMode();
-    }
+  // Mode switcher handler
+  modeSwitcher.addEventListener('change', (e) => {
+    gameMode = e.target.checked ? 'auto' : 'click';
+    // Save mode before reload
+    localStorage.setItem('visitWheel_gameMode', gameMode);
+    updateGameMode();
+    // Reload application to apply changes
+    location.reload();
   });
 
-  autoModeRadio.addEventListener('change', (e) => {
-    if (e.target.checked) {
-      gameMode = 'auto';
-      updateGameMode();
-    }
-  });
 }
 
 function updateGameMode() {
@@ -131,8 +146,7 @@ function updateGameMode() {
     }
   }
   
-  // Store in localStorage for persistence
-  localStorage.setItem('visitWheel_gameMode', gameMode);
+  // Game mode updated
   
   // Update body class for mode-specific styling
   document.body.classList.remove('mode-click', 'mode-auto');
@@ -152,18 +166,13 @@ function updateGameMode() {
 const savedMode = localStorage.getItem('visitWheel_gameMode');
 if (savedMode && (savedMode === 'click' || savedMode === 'auto')) {
   gameMode = savedMode;
-  
-  // Update radio buttons only in development
-  if (isDevelopment) {
-    const clickModeRadio = document.getElementById('clickMode');
-    const autoModeRadio = document.getElementById('autoMode');
-    if (clickModeRadio && autoModeRadio) {
-      if (gameMode === 'click') {
-        clickModeRadio.checked = true;
-      } else {
-        autoModeRadio.checked = true;
-      }
-    }
+}
+
+// Initialize switcher only in development
+if (isDevelopment) {
+  const modeSwitcher = document.getElementById('modeSwitcher');
+  if (modeSwitcher) {
+    modeSwitcher.checked = gameMode === 'auto';
   }
 }
 
@@ -478,6 +487,18 @@ setTimeout(() => {
   // Инициализируем кнопки после завершения анимации part5
   setTimeout(() => {
     initButtonHandlers();
+    // Start wheel-text1 pulsing after appears animation
+    startWheelText1Pulsing();
+    
+    // Auto start first spin in auto mode after all animations
+    if (gameMode === 'auto') {
+      setTimeout(() => {
+        const part5 = document.querySelector('.wheel-part5');
+        if (part5) {
+          part5.click();
+        }
+      }, 1500); // Start after 1.5 seconds when everything is ready
+    }
   }, 1000); // После завершения анимации part5
 }, 500); // Ждем 500ms чтобы все точно загрузилось
 
@@ -513,6 +534,9 @@ function initButtonHandlers() {
       
       // Set spinning flag
       gameConfig.spinning.isSpinning = true;
+      
+      // Stop wheel-text1 pulsing animation
+      stopWheelText1Pulsing();
       
       // Анимация нажатия - кнопка, wheel-wrapper, part4 и arrow уменьшаются
       const wheelWrapper = document.querySelector('.wheel-wrapper');
@@ -593,6 +617,46 @@ function stopPart4Pulsing() {
   }
 }
 
+// Variable to store wheel-text1 pulsing animation
+let wheelText1PulsingAnimation = null;
+
+// Start wheel-text1 concentric pulsing animation
+function startWheelText1Pulsing() {
+  const wheelText1 = document.querySelector('.wheel-text1');
+  if (!wheelText1) return;
+  
+  // Stop existing animation if running
+  if (wheelText1PulsingAnimation) {
+    wheelText1PulsingAnimation.kill();
+  }
+  
+  // Simple pulsing without complex effects
+  wheelText1PulsingAnimation = gsap.timeline({ repeat: -1 })
+    .to(wheelText1, {
+      duration: 1,
+      ease: "power2.inOut",
+      opacity: 0.7,
+      yoyo: true,
+      repeat: 1
+    });
+}
+
+// Stop wheel-text1 pulsing animation
+function stopWheelText1Pulsing() {
+  if (wheelText1PulsingAnimation) {
+    wheelText1PulsingAnimation.kill();
+    wheelText1PulsingAnimation = null;
+    
+    // Reset to normal state
+    const wheelText1 = document.querySelector('.wheel-text1');
+    if (wheelText1) {
+      gsap.set(wheelText1, { 
+        opacity: 1
+      });
+    }
+  }
+}
+
 // Wheel spinning animation function
 function spinWheel(targetSector) {
   const wheelWrapper = document.querySelector('.wheel-wrapper');
@@ -628,9 +692,38 @@ function spinWheel(targetSector) {
       const arrow = document.querySelector('.arrow');
       
       gsap.timeline()
-        .to(part4, { duration: 0.1, scale: 1, filter: "brightness(2)", ease: "power2.out" })
+        .to(part4, { duration: 0.1, scale: 1, ease: "power2.out" })
         .to([part5, part6], { duration: 0.5, scale: 0.30, ease: "back.out(1.5)" }, 0)
-        .to(part4, { duration: 0.2, filter: "brightness(1)", ease: "power2.out" });
+        .call(() => {
+          // Start wheel-text1 pulsing animation after wheel stops
+          startWheelText1Pulsing();
+          
+          // Auto spin next wheel if in auto mode
+          if (gameMode === 'auto') {
+            setTimeout(() => {
+              const nextTargetSector = getNextTargetSector();
+              if (nextTargetSector !== null) {
+                // Simulate button click
+                const part5 = document.querySelector('.wheel-part5');
+                if (part5) {
+                  part5.click();
+                }
+              }
+            }, gameConfig.autoMode.autoSpinDelay);
+          }
+        });
+      
+      // Check if modal should be shown
+      const shouldShowModal = gameMode === 'auto'
+        ? config.currentSpinIndex >= 1  // Show after first spin in auto mode
+        : config.currentSpinIndex >= config.targetSectors.length; // Show after all spins in click mode
+      
+      if (shouldShowModal) {
+        console.log('Показываем модальное окно!');
+        setTimeout(() => {
+          showModal();
+        }, 3000); // Wait 3 seconds before showing modal
+      }
       
       // Check if more spins are available
       if (config.currentSpinIndex >= config.targetSectors.length) {
@@ -640,6 +733,51 @@ function spinWheel(targetSector) {
       }
     }
   });
+}
+
+// Modal functions
+function showModal() {
+  const modalOverlay = document.getElementById('modalOverlay');
+  
+  if (modalOverlay) {
+    // Show modal overlay
+    modalOverlay.style.display = 'flex';
+    
+    // Animate modal appearance
+    gsap.timeline()
+      .to(modalOverlay, {
+        duration: 0.5,
+        opacity: 1,
+        ease: "power2.out"
+      })
+      .from('.modal-content', {
+        duration: 0.6,
+        scale: 0.3,
+        ease: "back.out(1.7)"
+      }, 0.2);
+  }
+}
+
+function hideModal() {
+  const modalOverlay = document.getElementById('modalOverlay');
+  
+  if (modalOverlay) {
+    // Animate modal disappearance
+    gsap.timeline()
+      .to('.modal-content', {
+        duration: 0.3,
+        scale: 0.3,
+        ease: "back.in(1.7)"
+      })
+      .to(modalOverlay, {
+        duration: 0.3,
+        opacity: 0,
+        ease: "power2.in",
+        onComplete: () => {
+          modalOverlay.style.display = 'none';
+        }
+      }, 0.1);
+  }
 }
 
 // Disable zoom and scroll for all devices including multitouch

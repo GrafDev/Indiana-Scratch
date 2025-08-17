@@ -37,7 +37,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('/assets/images/bg-main.png');
+  background-image: url('../images/bg-main.png');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -46,7 +46,7 @@ body {
 
 @media (max-aspect-ratio: 6/10) and (orientation: portrait) {
   .bg-container {
-    background-image: url('/assets/images/bg-mobile.png');
+    background-image: url('../images/bg-mobile.png');
   }
 }
 
@@ -196,11 +196,11 @@ body {
 }
 
 .man1, .box-man1 {
-  background-image: url('/assets/images/man1.png');
+  background-image: url('../images/man1.png');
 }
 
 .man2, .box-man2 {
-  background-image: url('/assets/images/man2.png');
+  background-image: url('../images/man2.png');
 }
 
 /* Hide man1 and man2 in main-wheel-container by default */
@@ -261,7 +261,7 @@ body {
 }
 
 .title {
-  background-image: url('/assets/images/title.png');
+  background-image: url('../images/title.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -299,27 +299,27 @@ body {
 }
 
 .wheel-part1 {
-  background-image: url('/assets/images/wheel-part1.png');
+  background-image: url('../images/wheel-part1.png');
   z-index: 1;
 }
 
 .wheel-part2 {
-  background-image: url('/assets/images/wheel-part2.png');
+  background-image: url('../images/wheel-part2.png');
   z-index: 2;
 }
 
 .wheel-part3 {
-  background-image: url('/assets/images/wheel-part3.png');
+  background-image: url('../images/wheel-part3.png');
   z-index: 3;
 }
 
 .wheel-text1 {
-  background-image: url('/assets/images/wheel-text1.png');
+  background-image: url('../images/wheel-text1.png');
   z-index: 4;
 }
 
 .wheel-text2 {
-  background-image: url('/assets/images/wheel-text2.png');
+  background-image: url('../images/wheel-text2.png');
   z-index: 5;
 }
 
@@ -330,7 +330,7 @@ body {
   transform: translate(-50%, -50%);
   width: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
   height: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
-  background-image: url('/assets/images/wheel-part4.png');
+  background-image: url('../images/wheel-part4.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -344,7 +344,7 @@ body {
   transform: translate(-50%, -50%);
   width: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
   height: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
-  background-image: url('/assets/images/wheel-part5.png');
+  background-image: url('../images/wheel-part5.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -358,7 +358,7 @@ body {
   transform: translate(-50%, -50%);
   width: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
   height: min(var(--wheel-container-width, 300px), var(--wheel-container-height, 300px));
-  background-image: url('/assets/images/wheel-part6.png');
+  background-image: url('../images/wheel-part6.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -372,7 +372,7 @@ body {
   transform: translateX(-50%);
   width: calc(var(--wheel-container-width, 300px) / 8);
   height: calc(var(--wheel-container-height, 300px) / 8);
-  background-image: url('/assets/images/arrow.png');
+  background-image: url('../images/arrow.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -413,4 +413,75 @@ h1 {
 
 /* Mobile portrait styles */
 @media (max-aspect-ratio: 6/10) and (orientation: portrait) {
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90vw;
+  height: 90vh;
+  max-width: 600px;
+  max-height: 400px;
+}
+
+.modal-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.modal-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.modal-button {
+  position: absolute;
+  bottom: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 20%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  z-index: 2;
+  text-decoration: none;
+}
+
+.modal-button:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+
+.modal-button:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+.modal-btn-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }

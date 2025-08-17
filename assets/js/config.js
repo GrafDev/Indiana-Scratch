@@ -15,6 +15,11 @@ export const gameConfig = {
     isSpinning: false // flag to prevent multiple spins
   },
   
+  // Auto mode configuration
+  autoMode: {
+    autoSpinDelay: 500 // delay before auto spin in ms
+  },
+  
   // Responsive breakpoints and multipliers
   responsive: {
     mobile: {
