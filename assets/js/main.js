@@ -511,6 +511,8 @@ setTimeout(() => {
     startMan1Part2Brightness();
     // Start man2-part2 brightness animation
     startMan2Part2Brightness();
+    // Start wheel-part3 radial shine animation
+    startWheelPart3Shine();
     
     // Auto start first spin in auto mode after all animations
     if (gameMode === 'auto') {
@@ -653,6 +655,9 @@ let man1Part2BrightnessAnimation = null;
 
 // Variable to store man2-part2 brightness animation
 let man2Part2BrightnessAnimation = null;
+
+// Variable to store wheel-part3 radial shine animation
+let wheelPart3ShineAnimation = null;
 
 // Function to create wheel-text1 shine effect on wheel stop
 function createWheelText1Shine() {
@@ -965,6 +970,116 @@ function stopMan2Part2Brightness() {
   }
 }
 
+// Start wheel-part3 shine animation
+function startWheelPart3Shine() {
+  const wheelPart3 = document.querySelector('.wheel-part3');
+  if (!wheelPart3) return;
+  
+  // Stop existing animation if running
+  if (wheelPart3ShineAnimation) {
+    wheelPart3ShineAnimation.kill();
+  }
+  
+  const parent = wheelPart3.parentElement;
+  
+  // Get element position and size
+  const rect = wheelPart3.getBoundingClientRect();
+  const parentRect = parent.getBoundingClientRect();
+  
+  // Create shine div positioned exactly over wheel-part3
+  const shine = document.createElement('div');
+  shine.className = 'wheel-part3-shine';
+  shine.style.cssText = `
+    position: absolute;
+    top: ${wheelPart3.offsetTop}px;
+    left: ${wheelPart3.offsetLeft}px;
+    width: ${wheelPart3.offsetWidth}px;
+    height: ${wheelPart3.offsetHeight}px;
+    background: linear-gradient(90deg, 
+      transparent 20%, 
+      rgba(255,255,255,0.8) 50%, 
+      transparent 80%
+    );
+    -webkit-mask-image: url('${wheelPart3Img}');
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: url('${wheelPart3Img}');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    pointer-events: none;
+    z-index: 20;
+    transform-origin: center center;
+  `;
+  
+  // Insert after the wheel-part3 element
+  parent.insertBefore(shine, wheelPart3.nextSibling);
+  
+  // Animate slow continuous rotation
+  const shineElement = document.querySelector('.wheel-part3-shine');
+  
+  wheelPart3ShineAnimation = gsap.to(shineElement, {
+    rotation: 360,
+    duration: 8, // Slow rotation
+    ease: 'none',
+    repeat: -1
+  });
+}
+
+// Stop wheel-part3 radial shine animation
+function stopWheelPart3Shine() {
+  if (wheelPart3ShineAnimation) {
+    wheelPart3ShineAnimation.kill();
+    wheelPart3ShineAnimation = null;
+    
+    // Remove shine element
+    const shine = document.querySelector('.wheel-part3-shine');
+    if (shine && shine.parentNode) {
+      shine.parentNode.removeChild(shine);
+    }
+  }
+}
+
+// Speed up wheel-part3 shine during wheel spin
+function speedUpWheelPart3Shine() {
+  const shineElement = document.querySelector('.wheel-part3-shine');
+  if (!shineElement) return;
+  
+  if (wheelPart3ShineAnimation) {
+    wheelPart3ShineAnimation.kill();
+  }
+  
+  wheelPart3ShineAnimation = gsap.to(shineElement, {
+    rotation: "+=1440", // Fast rotation (4 full turns)
+    duration: 1,
+    ease: 'none',
+    repeat: -1
+  });
+}
+
+// Slow down wheel-part3 shine after wheel stops
+function slowDownWheelPart3Shine() {
+  const shineElement = document.querySelector('.wheel-part3-shine');
+  if (!shineElement) return;
+  
+  if (wheelPart3ShineAnimation) {
+    wheelPart3ShineAnimation.kill();
+  }
+  
+  // Get current rotation to continue smoothly
+  const currentRotation = gsap.getProperty(shineElement, "rotation") || 0;
+  
+  wheelPart3ShineAnimation = gsap.fromTo(shineElement, {
+    rotation: currentRotation
+  }, {
+    rotation: currentRotation + 360,
+    duration: 8, // Back to slow rotation
+    ease: 'elastic.out(1, 0.3)', // Spring-like deceleration
+    repeat: -1
+  });
+}
+
 // Wheel spinning animation function
 function spinWheel(targetSector) {
   const wheelWrapper = document.querySelector('.wheel-wrapper');
@@ -980,17 +1095,44 @@ function spinWheel(targetSector) {
   console.log(`Текущий поворот: ${currentTotalRotation} градусов`);
   console.log(`Финальный угол поворота: ${finalAngle} градусов`);
   
-  // Create spinning animation
-  gsap.to(wheelWrapper, {
-    rotation: finalAngle,
-    duration: config.baseDuration,
-    ease: "power2.out",
-    onComplete: () => {
-      // Update current sector
-      config.currentSector = targetSector;
-      config.isSpinning = false;
+  // Speed up wheel-part3 shine during spin
+  speedUpWheelPart3Shine();
+  
+  // Create spinning animation with spring stop
+  gsap.timeline()
+    .to(wheelWrapper, {
+      rotation: finalAngle + 6, // Overshoot by 6 degrees
+      duration: config.baseDuration,
+      ease: "power2.out"
+    })
+    .to(wheelWrapper, {
+      rotation: finalAngle - 8, // Swing back 
+      duration: 0.2,
+      ease: "power2.inOut"
+    })
+    .to(wheelWrapper, {
+      rotation: finalAngle + 4, // Swing forward
+      duration: 0.15,
+      ease: "power2.inOut"
+    })
+    .to(wheelWrapper, {
+      rotation: finalAngle - 2, // Small swing back
+      duration: 0.1,
+      ease: "power2.inOut"
+    })
+    .to(wheelWrapper, {
+      rotation: finalAngle, // Finally settle
+      duration: 0.1,
+      ease: "power2.out",
+      onComplete: () => {
+        // Update current sector
+        config.currentSector = targetSector;
+        config.isSpinning = false;
       
       console.log(`Колесо остановилось на секторе ${targetSector}`);
+      
+      // Slow down wheel-part3 shine after wheel stops
+      slowDownWheelPart3Shine();
       
       // Scale part4 back to normal when wheel stops with brightness flash
       const part4 = document.querySelector('.wheel-part4');
@@ -1044,8 +1186,8 @@ function spinWheel(targetSector) {
       } else {
         console.log(`Осталось вращений: ${config.targetSectors.length - config.currentSpinIndex}`);
       }
-    }
-  });
+      }
+    });
 }
 
 // Modal functions
