@@ -5,7 +5,9 @@ import { gsap } from 'gsap'
 // Import images using Vite
 import bgMainImg from '../images/bg-main.png'
 import bgMobileImg from '../images/bg-mobile.png'
-import bgModalImg from '../images/bg-modal.png'
+import bgModalLeftImg from '../images/bg-modal-left.png'
+import bgModalCenterImg from '../images/bg-modal-center.png'
+import bgModalRightImg from '../images/bg-modal-right.png'
 import buttonModalImg from '../images/button-modal.png'
 import logo1Part1Img from '../images/logo1-part1.png'
 import logo1Part2Img from '../images/logo1-part2.png'
@@ -24,7 +26,8 @@ import wheelPart5Img from '../images/wheel-part5.png'
 import wheelPart6Img from '../images/wheel-part6.png'
 import wheelText1Img from '../images/wheel-text1.png'
 import wheelText2Img from '../images/wheel-text2.png'
-import arrowImg from '../images/arrow.png'
+import arrowPart1Img from '../images/arrow-part1.png'
+import arrowPart2Img from '../images/arrow-part2.png'
 
 let devMode = false;
 let gameMode = import.meta.env.VITE_GAME_MODE || 'click';
@@ -57,7 +60,10 @@ document.querySelector('#app').innerHTML = `
         <div class="wheel-part4"></div>
         <div class="wheel-part5"></div>
         <div class="wheel-part6"></div>
-        <div class="arrow"></div>
+        <div class="arrow">
+          <img src="${arrowPart1Img}" alt="Arrow Part 1" class="arrow-part1">
+          <img src="${arrowPart2Img}" alt="Arrow Part 2" class="arrow-part2">
+        </div>
       </div>
       <div class="man2">
         <img src="${man2Part1Img}" alt="Man 2 Part 1" class="man2-part1">
@@ -193,6 +199,22 @@ if (isDevelopment) {
 // Initialize mode
 updateGameMode();
 
+// Set modal images src
+function setModalImages() {
+  const leftImg = document.querySelector('.modal-bg-left');
+  const centerImg = document.querySelector('.modal-bg-center');
+  const rightImg = document.querySelector('.modal-bg-right');
+  
+  if (leftImg) leftImg.src = bgModalLeftImg;
+  if (centerImg) centerImg.src = bgModalCenterImg;
+  if (rightImg) rightImg.src = bgModalRightImg;
+}
+
+// Apply modal images when DOM is ready
+setTimeout(() => {
+  setModalImages();
+}, 100);
+
 // Apply responsive sizing
 function applyResponsiveSizing() {
   const wheelSize = calculateWheelSize();
@@ -229,6 +251,13 @@ function applyResponsiveSizing() {
   document.documentElement.style.setProperty('--wheel-container-height', `${wheelElementSize.height}px`);
   // Set default media gap
   document.documentElement.style.setProperty('--max-media-gap', `${wheelSize * 1.4}px`);
+  
+  // Set modal size based on wheel size
+  const modalContent = document.querySelector('.modal-content');
+  if (modalContent) {
+    modalContent.style.width = `${wheelSize}px`;
+    modalContent.style.height = `${wheelSize}px`;
+  }
   
   console.log(`Wheel size set to: ${wheelSize}px`);
   console.log(`Main container width: ${mainContainerWidth}px`);
@@ -519,6 +548,8 @@ setTimeout(() => {
     startWheelPart6Breathing();
     // Add hover controls to breathing animation
     setTimeout(() => addWheelPart6HoverControls(), 100);
+    // Start arrow-part2 brightness animation
+    startArrowPart2Brightness();
     
     // Auto start first spin in auto mode after all animations
     if (gameMode === 'auto') {
@@ -662,49 +693,50 @@ let man2Part2BrightnessAnimation = null;
 let wheelPart3ShineAnimation = null;
 let wheelPart1ShineAnimation = null;
 let wheelPart6BreathingAnimation = null;
+let arrowPart2ShineAnimation = null;
 
-// Function to create wheel-text1 shine effect on wheel stop
-function createWheelText1Shine() {
-  const wheelText1 = document.querySelector('.wheel-text1');
-  if (!wheelText1) return;
+// Function to create wheel-text shine effect on wheel stop
+function createWheelTextShine(textNumber) {
+  const wheelText = document.querySelector(`.wheel-text${textNumber}`);
+  if (!wheelText) return;
   
   // Strobe effect with multiple flashes
   gsap.timeline()
     // First big flash
-    .to(wheelText1, {
+    .to(wheelText, {
       filter: "brightness(3) drop-shadow(0 0 25px rgba(255,255,255,1))",
       duration: 0.08,
       ease: "power2.out"
     })
-    .to(wheelText1, {
+    .to(wheelText, {
       filter: "brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,0.3))",
       duration: 0.12,
       ease: "power2.out"
     })
     // Second flash (smaller)
-    .to(wheelText1, {
+    .to(wheelText, {
       filter: "brightness(2.2) drop-shadow(0 0 18px rgba(255,255,255,0.8))",
       duration: 0.06,
       ease: "power2.out"
     })
-    .to(wheelText1, {
+    .to(wheelText, {
       filter: "brightness(1.1) drop-shadow(0 0 3px rgba(255,255,255,0.2))",
       duration: 0.1,
       ease: "power2.out"
     })
     // Third flash (quick)
-    .to(wheelText1, {
+    .to(wheelText, {
       filter: "brightness(2.8) drop-shadow(0 0 22px rgba(255,255,255,0.9))",
       duration: 0.05,
       ease: "power2.out"
     })
-    .to(wheelText1, {
+    .to(wheelText, {
       filter: "brightness(1.05) drop-shadow(0 0 2px rgba(255,255,255,0.1))",
       duration: 0.08,
       ease: "power2.out"
     })
     // Final fade out
-    .to(wheelText1, {
+    .to(wheelText, {
       filter: "brightness(1) drop-shadow(0 0 0px rgba(255,255,255,0))",
       duration: 0.5,
       ease: "power2.out"
@@ -871,10 +903,10 @@ function startMan1Part2Brightness() {
     backgroundPosition: '-150% 0'
   }, {
     backgroundPosition: '150% 0',
-    duration: 3.5,
+    duration: 2.8,
     ease: 'power2.out',
     repeat: -1,
-    repeatDelay: 1.5
+    repeatDelay: 2.3
   });
 }
 
@@ -1181,6 +1213,80 @@ function stopWheelPart6Breathing() {
   }
 }
 
+// Start arrow-part2 shine animation
+function startArrowPart2Brightness() {
+  const arrowPart2Elements = document.querySelectorAll('.arrow-part2');
+  
+  // Stop existing animation if running
+  if (arrowPart2ShineAnimation) {
+    arrowPart2ShineAnimation.kill();
+  }
+  
+  // Create real div elements for shine
+  arrowPart2Elements.forEach(element => {
+    const parent = element.parentElement;
+    
+    // Create shine div positioned exactly over arrow-part2
+    const shine = document.createElement('div');
+    shine.className = 'arrow-shine-div';
+    shine.style.cssText = `
+      position: absolute;
+      top: ${element.offsetTop}px;
+      left: ${element.offsetLeft}px;
+      width: ${element.offsetWidth}px;
+      height: ${element.offsetHeight}px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        transparent 40%, 
+        rgba(255,255,255,0.6) 50%, 
+        transparent 60%,
+        transparent 100%
+      );
+      background-size: 300% 100%;
+      background-position: -100% 0;
+      -webkit-mask-image: url('${arrowPart2Img}');
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-image: url('${arrowPart2Img}');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      pointer-events: none;
+      z-index: 20;
+    `;
+    
+    // Insert after the arrow-part2 image
+    parent.insertBefore(shine, element.nextSibling);
+  });
+  
+  // Animate shine position
+  const shineElements = document.querySelectorAll('.arrow-shine-div');
+  arrowPart2ShineAnimation = gsap.fromTo(shineElements, {
+    backgroundPosition: '-150% 0'
+  }, {
+    backgroundPosition: '150% 0',
+    duration: 3.7,
+    ease: 'power2.out',
+    repeat: -1,
+    repeatDelay: 1.8
+  });
+}
+
+// Stop arrow-part2 shine animation
+function stopArrowPart2Brightness() {
+  if (arrowPart2ShineAnimation) {
+    arrowPart2ShineAnimation.kill();
+    arrowPart2ShineAnimation = null;
+    
+    // Remove shine element
+    const shine = document.querySelector('.arrow-part2-shine');
+    if (shine && shine.parentNode) {
+      shine.parentNode.removeChild(shine);
+    }
+  }
+}
+
 // Add hover controls to breathing animation
 function addWheelPart6HoverControls() {
   const wheelPart5 = document.querySelector('.wheel-part5');
@@ -1330,13 +1436,19 @@ function spinWheel(targetSector) {
         .to(part4, { duration: 0.1, scale: 1, ease: "power2.out" })
         .to([part5, part6], { duration: 0.8, scale: 0.30, ease: "elastic.out(1, 0.5)" }, 0)
         .call(() => {
-          // Create shine effect when wheel stops
-          createWheelText1Shine();
-          
-          // Start wheel-text1 pulsing animation after wheel stops and shine effect
-          setTimeout(() => {
-            startWheelText1Pulsing();
-          }, 1000); // Wait for shine effect to complete (1.0s)
+          // Create shine effect when wheel stops - text1 after first stop, text2 after second stop
+          if (config.currentSpinIndex === 1) {
+            // First spin completed - show text1 shine
+            createWheelTextShine(1);
+            // Start wheel-text1 pulsing animation after wheel stops and shine effect
+            setTimeout(() => {
+              startWheelText1Pulsing();
+            }, 1000); // Wait for shine effect to complete (1.0s)
+          } else if (config.currentSpinIndex === 2) {
+            // Second spin completed - show text2 shine
+            createWheelTextShine(2);
+            // Don't start wheel-text1 pulsing after second spin
+          }
           
           // Auto spin next wheel if in auto mode
           if (gameMode === 'auto') {
@@ -1380,6 +1492,14 @@ function showModal() {
   const modalOverlay = document.getElementById('modalOverlay');
   
   if (modalOverlay) {
+    // Update modal size to match current wheel size
+    const wheelSize = calculateWheelSize();
+    const modalContent = document.querySelector('.modal-content');
+    if (modalContent) {
+      modalContent.style.width = `${wheelSize}px`;
+      modalContent.style.height = `${wheelSize}px`;
+    }
+    
     // Show modal overlay
     modalOverlay.style.display = 'flex';
     

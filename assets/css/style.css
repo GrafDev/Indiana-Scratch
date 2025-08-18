@@ -250,6 +250,13 @@ body {
   }
 }
 
+/* Tablet portrait - move wheel up */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .main-container {
+    padding-bottom: 10vh;
+  }
+}
+
 /* Hide logo1 and logo2 in main-container on landscape orientation */
 @media (orientation: landscape) {
   .main-container {
@@ -405,12 +412,26 @@ body {
   transform: translateX(-50%);
   width: calc(var(--wheel-container-width, 300px) / 8);
   height: calc(var(--wheel-container-height, 300px) / 8);
-  background-image: url('../images/arrow.png');
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
   z-index: 9999;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 1));
+}
+
+.arrow img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.arrow-part1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.arrow-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 
@@ -470,11 +491,26 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90vw;
-  height: 90vh;
-  max-width: 600px;
-  max-height: 400px;
+  width: var(--wheel-size);
+  height: var(--wheel-size);
+  max-width: 105vw;
+  max-height: 105vh;
 }
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: calc(var(--wheel-size) * 1.5);
+    height: calc(var(--wheel-size) * 1.5);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .modal-content {
+    width: calc(var(--wheel-size) * 0.8);
+    height: calc(var(--wheel-size) * 0.8);
+  }
+}
+
 
 .modal-background {
   position: absolute;
@@ -483,13 +519,71 @@ h1 {
   width: 100%;
   height: 100%;
   z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
-.modal-bg-image {
-  width: 100%;
-  height: 100%;
+.modal-bg-left,
+.modal-bg-center,
+.modal-bg-right {
   object-fit: contain;
-  display: block;
+  height: 80%;
+  width: auto;
+}
+
+.modal-bg-left {
+  width: auto;
+  position: relative;
+  z-index: 2;
+  margin-right: -20px;
+}
+
+.modal-bg-center {
+  width: auto;
+  z-index: 1;
+}
+
+.modal-bg-right {
+  width: auto;
+  position: relative;
+  z-index: 2;
+  margin-left: -20px;
+}
+
+@media (max-width: 768px) {
+  .modal-bg-left {
+    margin-right: -15px;
+  }
+  
+  .modal-bg-right {
+    margin-left: -15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-bg-left,
+  .modal-bg-center,
+  .modal-bg-right {
+    height: 70%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-bg-left {
+    margin-right: -10px;
+  }
+  
+  .modal-bg-right {
+    margin-left: -10px;
+  }
+  
+  .modal-bg-left,
+  .modal-bg-center,
+  .modal-bg-right {
+    height: 60%;
+  }
 }
 
 .modal-button {

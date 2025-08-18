@@ -28,7 +28,7 @@ export const gameConfig = {
     },
     tablet: {
       maxWidth: 1024,
-      wheelMultiplier: 0.85, // 85% of base size for tablet
+      wheelMultiplier: 0.7, // 70% of base size for tablet
     },
     desktop: {
       wheelMultiplier: 1.0,  // 100% base size for desktop
@@ -80,8 +80,8 @@ export function calculateWheelSize() {
     availableSpace = Math.min(screenWidth, screenHeight) * 0.9;
     
     if (aspectRatio >= 0.6 && aspectRatio < 1.3) {
-      // Tablet: reduce to 90%
-      availableSpace = availableSpace * 0.9;
+      // Tablet: reduce to 75%
+      availableSpace = availableSpace * 0.75;
     } else if (aspectRatio >= 1.3) {
       // Desktop: reduce to 80%
       availableSpace = availableSpace * 0.8;
