@@ -211,12 +211,24 @@ body {
   left: 0;
 }
 
-.man2, .box-man2 {
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-image: url('../images/man2.png');
+.man2 img, .box-man2 img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
+
+.man2-part1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.man2-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 
 /* Hide man1 and man2 in main-wheel-container by default */
 .main-container .man1,

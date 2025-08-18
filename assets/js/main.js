@@ -11,10 +11,10 @@ import logo1Part1Img from '../images/logo1-part1.png'
 import logo1Part2Img from '../images/logo1-part2.png'
 import logo2Part1Img from '../images/logo2-part1.png'
 import logo2Part2Img from '../images/logo2-part2.png'
-import man1Img from '../images/man1.png'
 import man1Part1Img from '../images/man1-part1.png'
 import man1Part2Img from '../images/man1-part2.png'
-import man2Img from '../images/man2.png'
+import man2Part1Img from '../images/man2-part1.png'
+import man2Part2Img from '../images/man2-part2.png'
 import titleImg from '../images/title.png'
 import wheelPart1Img from '../images/wheel-part1.png'
 import wheelPart2Img from '../images/wheel-part2.png'
@@ -59,7 +59,10 @@ document.querySelector('#app').innerHTML = `
         <div class="wheel-part6"></div>
         <div class="arrow"></div>
       </div>
-      <div class="man2"></div>
+      <div class="man2">
+        <img src="${man2Part1Img}" alt="Man 2 Part 1" class="man2-part1">
+        <img src="${man2Part2Img}" alt="Man 2 Part 2" class="man2-part2">
+      </div>
     </div>
     <div class="media-container">
       <div class="box1">
@@ -78,7 +81,10 @@ document.querySelector('#app').innerHTML = `
           <img src="${logo2Part1Img}" alt="Logo 2 Part 1" class="logo2-part1">
           <img src="${logo2Part2Img}" alt="Logo 2 Part 2" class="logo2-part2">
         </div>
-        <div class="box-man2"></div>
+        <div class="box-man2">
+          <img src="${man2Part1Img}" alt="Man 2 Part 1" class="man2-part1">
+          <img src="${man2Part2Img}" alt="Man 2 Part 2" class="man2-part2">
+        </div>
         <div class="spacer"></div>
       </div>
     </div>
@@ -503,6 +509,8 @@ setTimeout(() => {
     startLogo2Part2Brightness();
     // Start man1-part2 brightness animation
     startMan1Part2Brightness();
+    // Start man2-part2 brightness animation
+    startMan2Part2Brightness();
     
     // Auto start first spin in auto mode after all animations
     if (gameMode === 'auto') {
@@ -642,6 +650,9 @@ let logo2Part2BrightnessAnimation = null;
 
 // Variable to store man1-part2 brightness animation
 let man1Part2BrightnessAnimation = null;
+
+// Variable to store man2-part2 brightness animation
+let man2Part2BrightnessAnimation = null;
 
 // Function to create wheel-text1 shine effect on wheel stop
 function createWheelText1Shine() {
@@ -803,15 +814,58 @@ function startMan1Part2Brightness() {
     man1Part2BrightnessAnimation.kill();
   }
   
-  // Simple brightness pulsing animation like logos
-  man1Part2BrightnessAnimation = gsap.fromTo(man1Part2Elements, {
-    filter: "brightness(0.7)"
+  // Create real div elements for shine (псевдоэлементы не работают на img)
+  man1Part2Elements.forEach(element => {
+    const parent = element.parentElement;
+    
+    // Get element position and size
+    const rect = element.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
+    
+    // Create shine div positioned exactly over part2
+    const shine = document.createElement('div');
+    shine.className = 'man1-shine-div';
+    shine.style.cssText = `
+      position: absolute;
+      top: ${element.offsetTop}px;
+      left: ${element.offsetLeft}px;
+      width: ${element.offsetWidth}px;
+      height: ${element.offsetHeight}px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        transparent 40%, 
+        rgba(255,255,255,0.4) 50%, 
+        transparent 60%,
+        transparent 100%
+      );
+      background-size: 300% 100%;
+      background-position: -100% 0;
+      -webkit-mask-image: url('${man1Part2Img}');
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-image: url('${man1Part2Img}');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      pointer-events: none;
+      z-index: 2;
+    `;
+    
+    // Insert after the man1-part2 image
+    parent.insertBefore(shine, element.nextSibling);
+  });
+  
+  // Animate shine position
+  const shineElements = document.querySelectorAll('.man1-shine-div');
+  man1Part2BrightnessAnimation = gsap.fromTo(shineElements, {
+    backgroundPosition: '-150% 0'
   }, {
-    filter: "brightness(1.4)",
-    duration: 1.2,
-    ease: "power2.inOut",
-    yoyo: true,
-    repeat: -1
+    backgroundPosition: '150% 0',
+    duration: 3.5,
+    ease: 'power2.out',
+    repeat: -1,
+    repeatDelay: 1.5
   });
 }
 
@@ -821,9 +875,93 @@ function stopMan1Part2Brightness() {
     man1Part2BrightnessAnimation.kill();
     man1Part2BrightnessAnimation = null;
     
-    // Reset to normal brightness
-    const man1Part2Elements = document.querySelectorAll('.man1-part2');
-    gsap.set(man1Part2Elements, { filter: "brightness(1)" });
+    // Remove shine div elements
+    const shineElements = document.querySelectorAll('.man1-shine-div');
+    shineElements.forEach(shine => {
+      if (shine.parentNode) {
+        shine.parentNode.removeChild(shine);
+      }
+    });
+  }
+}
+
+// Start man2-part2 brightness animation
+function startMan2Part2Brightness() {
+  const man2Part2Elements = document.querySelectorAll('.man2-part2');
+  
+  // Stop existing animation if running
+  if (man2Part2BrightnessAnimation) {
+    man2Part2BrightnessAnimation.kill();
+  }
+  
+  // Create real div elements for shine (псевдоэлементы не работают на img)
+  man2Part2Elements.forEach(element => {
+    const parent = element.parentElement;
+    
+    // Get element position and size
+    const rect = element.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
+    
+    // Create shine div positioned exactly over part2
+    const shine = document.createElement('div');
+    shine.className = 'man2-shine-div';
+    shine.style.cssText = `
+      position: absolute;
+      top: ${element.offsetTop}px;
+      left: ${element.offsetLeft}px;
+      width: ${element.offsetWidth}px;
+      height: ${element.offsetHeight}px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        transparent 40%, 
+        rgba(255,255,255,0.4) 50%, 
+        transparent 60%,
+        transparent 100%
+      );
+      background-size: 300% 100%;
+      background-position: -100% 0;
+      -webkit-mask-image: url('${man2Part2Img}');
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-image: url('${man2Part2Img}');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      pointer-events: none;
+      z-index: 2;
+    `;
+    
+    // Insert after the man2-part2 image
+    parent.insertBefore(shine, element.nextSibling);
+  });
+  
+  // Animate shine position
+  const shineElements = document.querySelectorAll('.man2-shine-div');
+  man2Part2BrightnessAnimation = gsap.fromTo(shineElements, {
+    backgroundPosition: '-150% 0'
+  }, {
+    backgroundPosition: '150% 0',
+    duration: 4.2,
+    ease: 'power2.out',
+    repeat: -1,
+    repeatDelay: 1.2
+  });
+}
+
+// Stop man2-part2 brightness animation
+function stopMan2Part2Brightness() {
+  if (man2Part2BrightnessAnimation) {
+    man2Part2BrightnessAnimation.kill();
+    man2Part2BrightnessAnimation = null;
+    
+    // Remove shine div elements
+    const shineElements = document.querySelectorAll('.man2-shine-div');
+    shineElements.forEach(shine => {
+      if (shine.parentNode) {
+        shine.parentNode.removeChild(shine);
+      }
+    });
   }
 }
 
