@@ -328,11 +328,13 @@ body {
 .wheel-part1 {
   background-image: url('../images/wheel-part1.png');
   z-index: 1;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
 }
 
 .wheel-part2 {
   background-image: url('../images/wheel-part2.png');
   z-index: 2;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
 }
 
 .wheel-part3 {
@@ -404,6 +406,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 9999;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 1));
 }
 
 

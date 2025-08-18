@@ -513,6 +513,8 @@ setTimeout(() => {
     startMan2Part2Brightness();
     // Start wheel-part3 radial shine animation
     startWheelPart3Shine();
+    // Start wheel-part1 shine animation
+    startWheelPart1Shine();
     
     // Auto start first spin in auto mode after all animations
     if (gameMode === 'auto') {
@@ -658,6 +660,7 @@ let man2Part2BrightnessAnimation = null;
 
 // Variable to store wheel-part3 radial shine animation
 let wheelPart3ShineAnimation = null;
+let wheelPart1ShineAnimation = null;
 
 // Function to create wheel-text1 shine effect on wheel stop
 function createWheelText1Shine() {
@@ -1078,6 +1081,33 @@ function slowDownWheelPart3Shine() {
     ease: 'elastic.out(1, 0.3)', // Spring-like deceleration
     repeat: -1
   });
+}
+
+// Start wheel-part1 shine animation
+function startWheelPart1Shine() {
+  const wheelPart1 = document.querySelector('.wheel-part1');
+  if (!wheelPart1) return;
+  
+  wheelPart1ShineAnimation = gsap.to(wheelPart1, {
+    filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 16px rgba(255, 255, 255, 0.6))',
+    duration: 1,
+    ease: 'power3.inOut',
+    yoyo: true,
+    repeat: -1
+  });
+}
+
+// Stop wheel-part1 shine animation
+function stopWheelPart1Shine() {
+  if (wheelPart1ShineAnimation) {
+    wheelPart1ShineAnimation.kill();
+    wheelPart1ShineAnimation = null;
+    
+    const wheelPart1 = document.querySelector('.wheel-part1');
+    if (wheelPart1) {
+      gsap.set(wheelPart1, { filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))' });
+    }
+  }
 }
 
 // Wheel spinning animation function
