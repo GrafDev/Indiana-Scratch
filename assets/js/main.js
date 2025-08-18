@@ -202,7 +202,7 @@ updateGameMode();
 // Set modal images src
 function setModalImages() {
   const leftImg = document.querySelector('.modal-bg-left');
-  const centerImg = document.querySelector('.modal-bg-center');
+  const centerImg = document.querySelector('.modal-bg-center img');
   const rightImg = document.querySelector('.modal-bg-right');
   
   if (leftImg) leftImg.src = bgModalLeftImg;
@@ -1500,21 +1500,66 @@ function showModal() {
       modalContent.style.height = `${wheelSize}px`;
     }
     
-    // Show modal overlay
-    modalOverlay.style.display = 'flex';
-    
-    // Animate modal appearance
-    gsap.timeline()
-      .to(modalOverlay, {
-        duration: 0.5,
-        opacity: 1,
-        ease: "power2.out"
-      })
-      .from('.modal-content', {
-        duration: 0.6,
-        scale: 0.3,
-        ease: "back.out(1.7)"
-      }, 0.2);
+    // Setup initial state BEFORE showing modal
+    const centerContainer = document.querySelector('.modal-bg-center');
+    if (centerContainer) {
+      // Show modal to get dimensions
+      modalOverlay.style.display = 'flex';
+      modalOverlay.style.opacity = '0';
+      
+      const centerImg = centerContainer.querySelector('img');
+      const finalWidth = centerImg ? centerImg.naturalWidth : centerContainer.offsetWidth;
+      const startWidth = finalWidth * 0.1; // 10% от финальной ширины
+      
+      // Set initial narrow state
+      gsap.set('.modal-bg-center', {
+        width: `${startWidth}px`,
+        overflow: 'hidden'
+      });
+      
+      // Force image natural width
+      console.log('Looking for center image...');
+      const img = centerContainer.querySelector('img');
+      console.log('Found img:', img);
+      if (img) {
+        console.log('Image src before:', img.src);
+        const setNaturalSize = () => {
+          console.log('Image src:', img.src);
+          console.log('Natural size:', img.naturalWidth, img.naturalHeight);
+          console.log('Current size:', img.offsetWidth, img.offsetHeight);
+          
+          // Принудительно через setAttribute
+          img.setAttribute('style', `
+            width: ${img.naturalWidth}px !important;
+            height: ${img.naturalHeight}px !important;
+            min-width: ${img.naturalWidth}px !important;
+            max-width: ${img.naturalWidth}px !important;
+            object-fit: none !important;
+            flex-shrink: 0 !important;
+          `);
+        };
+        
+        if (img.complete && img.naturalWidth > 0) {
+          setNaturalSize();
+        } else {
+          img.onload = setNaturalSize;
+        }
+      }
+      
+      
+      // Now animate
+      gsap.timeline()
+        .to(modalOverlay, {
+          duration: 0.5,
+          opacity: 1,
+          ease: "power2.out"
+        })
+        .to('.modal-bg-center', {
+          duration: 0.8,
+          width: `${finalWidth}px`,
+          ease: "power2.out"
+        }, 0.2);
+    }
   }
 }
 

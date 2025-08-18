@@ -526,62 +526,64 @@ h1 {
 }
 
 .modal-bg-left,
-.modal-bg-center,
 .modal-bg-right {
   object-fit: contain;
   height: 80%;
   width: auto;
 }
 
+
 .modal-bg-left {
   width: auto;
   position: relative;
   z-index: 2;
-  margin-right: -20px;
+  margin-right: -18px;
 }
 
 .modal-bg-center {
-  width: auto;
-  z-index: 1;
+  height: 80%;
+  z-index: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.modal-bg-center img {
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  object-position: center;
+}
+
 
 .modal-bg-right {
   width: auto;
   position: relative;
   z-index: 2;
-  margin-left: -20px;
+  margin-left: -18px;
 }
 
 @media (max-width: 768px) {
-  .modal-bg-left {
-    margin-right: -15px;
-  }
-  
-  .modal-bg-right {
-    margin-left: -15px;
-  }
 }
 
 @media (max-width: 768px) {
   .modal-bg-left,
-  .modal-bg-center,
   .modal-bg-right {
+    height: 70%;
+  }
+  
+  .modal-bg-center {
     height: 70%;
   }
 }
 
 @media (max-width: 480px) {
-  .modal-bg-left {
-    margin-right: -10px;
-  }
-  
-  .modal-bg-right {
-    margin-left: -10px;
-  }
-  
   .modal-bg-left,
-  .modal-bg-center,
-  .modal-bg-right {
+  .modal-bg-right,
+  .modal-bg-center {
     height: 60%;
   }
 }
