@@ -261,6 +261,30 @@ function applyResponsiveSizing() {
   
   console.log(`Wheel size set to: ${wheelSize}px`);
   console.log(`Main container width: ${mainContainerWidth}px`);
+  
+  // Recreate dynamic shine elements with new size and position
+  const wheelPart3Shine = document.querySelector('.wheel-part3-shine');
+  if (wheelPart3Shine) {
+    startWheelPart3Shine();
+  }
+  
+  const man1ShineElements = document.querySelectorAll('.man1-shine-div');
+  if (man1ShineElements.length > 0) {
+    stopMan1Part2Brightness();
+    startMan1Part2Brightness();
+  }
+  
+  const man2ShineElements = document.querySelectorAll('.man2-shine-div');
+  if (man2ShineElements.length > 0) {
+    stopMan2Part2Brightness();
+    startMan2Part2Brightness();
+  }
+  
+  const arrowShineElements = document.querySelectorAll('.arrow-shine-div');
+  if (arrowShineElements.length > 0) {
+    stopArrowPart2Brightness();
+    startArrowPart2Brightness();
+  }
 }
 
 // Apply sizing on load
@@ -1016,6 +1040,12 @@ function startWheelPart3Shine() {
     wheelPart3ShineAnimation.kill();
   }
   
+  // Remove existing shine element
+  const existingShine = document.querySelector('.wheel-part3-shine');
+  if (existingShine && existingShine.parentNode) {
+    existingShine.parentNode.removeChild(existingShine);
+  }
+  
   const parent = wheelPart3.parentElement;
   
   // Get element position and size
@@ -1287,6 +1317,110 @@ function stopArrowPart2Brightness() {
   }
 }
 
+// Variable to store modal button shine animation
+let modalButtonShineAnimation = null;
+
+// Start modal button shine animation (always running)
+function startModalButtonShine() {
+  const modalButton = document.querySelector('.modal-button');
+  if (!modalButton) return;
+  
+  // Stop existing animation if running
+  if (modalButtonShineAnimation) {
+    modalButtonShineAnimation.kill();
+  }
+  
+  // Remove existing shine element
+  const existingShine = document.querySelector('.modal-button-shine');
+  if (existingShine && existingShine.parentNode) {
+    existingShine.parentNode.removeChild(existingShine);
+  }
+  
+  // Create shine div positioned exactly over modal button
+  const shine = document.createElement('div');
+  shine.className = 'modal-button-shine';
+  shine.style.cssText = `
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      transparent 45%, 
+      rgba(255,255,255,0.5) 50%, 
+      transparent 55%,
+      transparent 100%
+    );
+    background-size: 300% 100%;
+    background-position: -100% 0;
+    -webkit-mask-image: url('${buttonModalImg}');
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: url('${buttonModalImg}');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    pointer-events: none;
+    z-index: 4;
+  `;
+  
+  // Insert shine element into modal button
+  modalButton.appendChild(shine);
+  
+  // Animate shine position with repeat from left to right
+  modalButtonShineAnimation = gsap.fromTo(shine, {
+    backgroundPosition: '-150% 0'
+  }, {
+    backgroundPosition: '150% 0',
+    duration: 1.2,
+    ease: 'power2.out',
+    repeat: -1,
+    repeatDelay: 2.5
+  });
+}
+
+// Stop modal button shine animation
+function stopModalButtonShine() {
+  if (modalButtonShineAnimation) {
+    modalButtonShineAnimation.kill();
+    modalButtonShineAnimation = null;
+  }
+  
+  // Remove shine element
+  const shine = document.querySelector('.modal-button-shine');
+  if (shine && shine.parentNode) {
+    shine.parentNode.removeChild(shine);
+  }
+}
+
+// Add hover controls to modal button (shadow effect)
+function addModalButtonHoverControls() {
+  const modalButton = document.querySelector('.modal-button');
+  if (!modalButton) return;
+  
+  modalButton.addEventListener('mouseenter', () => {
+    // Add light shadow and scale up on hover
+    gsap.to(modalButton, {
+      filter: 'drop-shadow(0 8px 20px rgba(255, 255, 255, 0.4))',
+      scale: 1.5,
+      duration: 0.3,
+      ease: 'power2.out'
+    });
+  });
+  
+  modalButton.addEventListener('mouseleave', () => {
+    // Remove shadow and scale back on mouse leave
+    gsap.to(modalButton, {
+      filter: 'none',
+      scale: 1.4,
+      duration: 0.3,
+      ease: 'power2.out'
+    });
+  });
+}
+
 // Add hover controls to breathing animation
 function addWheelPart6HoverControls() {
   const wheelPart5 = document.querySelector('.wheel-part5');
@@ -1509,7 +1643,7 @@ function showModal() {
       
       const centerImg = centerContainer.querySelector('img');
       const finalWidth = centerImg ? centerImg.naturalWidth : centerContainer.offsetWidth;
-      const startWidth = finalWidth * 0.1; // 10% от финальной ширины
+      const startWidth = finalWidth * 0.08; // 8% от финальной ширины
       
       // Set initial narrow state
       gsap.set('.modal-bg-center', {
@@ -1558,7 +1692,18 @@ function showModal() {
           duration: 0.8,
           width: `${finalWidth}px`,
           ease: "power2.out"
-        }, 0.2);
+        }, 0.4)
+        .to('.modal-button', {
+          duration: 0.5,
+          opacity: 1,
+          scale: 1.4,
+          ease: "power1.out"
+        }, 1.2)
+        .call(() => {
+          // Start continuous shine animation and add hover controls
+          startModalButtonShine();
+          addModalButtonHoverControls();
+        }, [], 1.7);
     }
   }
 }

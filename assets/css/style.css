@@ -599,15 +599,13 @@ h1 {
   transition: transform 0.2s ease;
   z-index: 2;
   text-decoration: none;
-}
-
-.modal-button:hover {
-  transform: translateX(-50%) scale(1.1);
+  opacity: 0;
 }
 
 .modal-button:active {
   transform: translateX(-50%) scale(0.95);
 }
+
 
 .modal-btn-image {
   width: 100%;
