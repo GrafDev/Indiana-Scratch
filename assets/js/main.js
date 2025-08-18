@@ -515,6 +515,10 @@ setTimeout(() => {
     startWheelPart3Shine();
     // Start wheel-part1 shine animation
     startWheelPart1Shine();
+    // Start wheel-part6 breathing animation
+    startWheelPart6Breathing();
+    // Add hover controls to breathing animation
+    setTimeout(() => addWheelPart6HoverControls(), 100);
     
     // Auto start first spin in auto mode after all animations
     if (gameMode === 'auto') {
@@ -564,6 +568,23 @@ function initButtonHandlers() {
       // Stop wheel-text1 pulsing animation
       stopWheelText1Pulsing();
       
+      // Stop ALL wheel-part6 animations during spin
+      stopWheelPart6Breathing();
+      
+      // Reset wheel-part6 to normal appearance (remove any hover effects)
+      const part5 = document.querySelector('.wheel-part5');
+      const part6 = document.querySelector('.wheel-part6');
+      if (part6) {
+        gsap.set(part6, {
+          opacity: 1,
+          filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
+        });
+      }
+      
+      // Remove cursor pointer during spin
+      if (part5) part5.style.cursor = 'default';
+      if (part6) part6.style.cursor = 'default';
+      
       // Анимация нажатия - кнопка, wheel-wrapper, part4 и arrow уменьшаются
       const wheelWrapper = document.querySelector('.wheel-wrapper');
       const part4 = document.querySelector('.wheel-part4');
@@ -571,13 +592,13 @@ function initButtonHandlers() {
       
       gsap.timeline()
         // Уменьшение при нажатии
-        .to([part5, part6], { duration: 0.1, scale: 0.28 }, 0)
-        .to(wheelWrapper, { duration: 0.1, scale: 0.98 }, 0)
-        .to(part4, { duration: 0.1, scale: 0.1 }, 0)
+        .to([part5, part6], { duration: 0.2, scale: 0.28, ease: 'power2.out' }, 0)
+        .to(wheelWrapper, { duration: 0.2, scale: 0.98, ease: 'power2.out' }, 0)
+        .to(part4, { duration: 0.2, scale: 0.1, ease: 'power2.out' }, 0)
         // Start wheel spinning when button is fully pressed
         .call(() => {
           spinWheel(targetSector);
-        }, [], 0.1)
+        }, [], 0.2)
         // Return wheel-wrapper to normal size
         .to(wheelWrapper, { duration: 0.2, scale: 1, ease: "back.out(1.5)" }, 0.1);
     };
@@ -585,27 +606,6 @@ function initButtonHandlers() {
     part5.addEventListener('click', handleClick);
     part6.addEventListener('click', handleClick);
     
-    // Эффект при наведении - увеличиваем кнопку и добавляем мощное сияние part6
-    const handleMouseEnter = (e) => {
-      // Don't apply hover effects during spinning
-      if (gameConfig.spinning.isSpinning) return;
-      
-      gsap.to([part5, part6], { duration: 0.2, scale: 0.32 });
-      gsap.to(part6, { duration: 0.2, filter: "drop-shadow(0 0 20px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.5))" });
-    };
-    
-    const handleMouseLeave = (e) => {
-      // Don't apply hover effects during spinning
-      if (gameConfig.spinning.isSpinning) return;
-      
-      gsap.to([part5, part6], { duration: 0.2, scale: 0.30 });
-      gsap.to(part6, { duration: 0.2, filter: "drop-shadow(0 0 0px rgba(255, 255, 255, 0))" });
-    };
-    
-    part5.addEventListener('mouseenter', handleMouseEnter);
-    part5.addEventListener('mouseleave', handleMouseLeave);
-    part6.addEventListener('mouseenter', handleMouseEnter);
-    part6.addEventListener('mouseleave', handleMouseLeave);
   }
 }
 
@@ -661,6 +661,7 @@ let man2Part2BrightnessAnimation = null;
 // Variable to store wheel-part3 radial shine animation
 let wheelPart3ShineAnimation = null;
 let wheelPart1ShineAnimation = null;
+let wheelPart6BreathingAnimation = null;
 
 // Function to create wheel-text1 shine effect on wheel stop
 function createWheelText1Shine() {
@@ -1110,6 +1111,151 @@ function stopWheelPart1Shine() {
   }
 }
 
+// Start wheel-part6 breathing animation (based on click animation)
+function startWheelPart6Breathing() {
+  const wheelPart5 = document.querySelector('.wheel-part5');
+  const wheelPart6 = document.querySelector('.wheel-part6');
+  if (!wheelPart5 || !wheelPart6) return;
+  
+  // Set initial state to normal size
+  gsap.set([wheelPart5, wheelPart6], { scale: 0.30 });
+  
+  // Create heartbeat-like pulsation - "tuk-tuk" with pause, starting from normal state
+  wheelPart6BreathingAnimation = gsap.timeline({ repeat: -1 })
+    // Start with pause (normal state)
+    .to([wheelPart5, wheelPart6], {
+      scale: 0.30,
+      duration: 0.5,
+      ease: 'none'
+    })
+    // First "tuk"
+    .to([wheelPart5, wheelPart6], {
+      scale: 0.28,
+      duration: 0.15,
+      ease: 'power2.out'
+    })
+    .to([wheelPart5, wheelPart6], {
+      scale: 0.30,
+      duration: 0.2,
+      ease: 'power2.out'
+    })
+    // Small pause between "tuk-tuk"
+    .to([wheelPart5, wheelPart6], {
+      scale: 0.30,
+      duration: 0.1,
+      ease: 'none'
+    })
+    // Second "tuk"
+    .to([wheelPart5, wheelPart6], {
+      scale: 0.28,
+      duration: 0.15,
+      ease: 'power2.out'
+    })
+    .to([wheelPart5, wheelPart6], {
+      scale: 0.30,
+      duration: 0.2,
+      ease: 'power2.out'
+    })
+    // Longer pause between heartbeats
+    .to([wheelPart5, wheelPart6], {
+      scale: 0.30,
+      duration: 0.5,
+      ease: 'none'
+    });
+}
+
+// Stop wheel-part6 breathing animation
+function stopWheelPart6Breathing() {
+  if (wheelPart6BreathingAnimation) {
+    wheelPart6BreathingAnimation.kill();
+    wheelPart6BreathingAnimation = null;
+    
+    const wheelPart5 = document.querySelector('.wheel-part5');
+    const wheelPart6 = document.querySelector('.wheel-part6');
+    if (wheelPart5 && wheelPart6) {
+      gsap.set([wheelPart5, wheelPart6], { 
+        scale: 0.3,
+        filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
+      });
+    }
+  }
+}
+
+// Add hover controls to breathing animation
+function addWheelPart6HoverControls() {
+  const wheelPart5 = document.querySelector('.wheel-part5');
+  const wheelPart6 = document.querySelector('.wheel-part6');
+  if (!wheelPart5 || !wheelPart6 || !wheelPart6BreathingAnimation) return;
+  
+  [wheelPart5, wheelPart6].forEach(element => {
+    element.addEventListener('mouseenter', () => {
+      if (!gameConfig.spinning.isSpinning) {
+        // Make pulsation tiny and fast - like trying to break free
+        if (wheelPart6BreathingAnimation) {
+          wheelPart6BreathingAnimation.kill();
+          // Create tiny pulsation with same timing as heartbeat
+          wheelPart6BreathingAnimation = gsap.timeline({ repeat: -1 })
+            // First tiny "tuk"
+            .to([wheelPart5, wheelPart6], {
+              scale: 0.295,
+              duration: 0.15,
+              ease: 'power2.out'
+            })
+            .to([wheelPart5, wheelPart6], {
+              scale: 0.30,
+              duration: 0.2,
+              ease: 'power2.out'
+            })
+            // Small pause between "tuk-tuk"
+            .to([wheelPart5, wheelPart6], {
+              scale: 0.30,
+              duration: 0.1,
+              ease: 'none'
+            })
+            // Second tiny "tuk"
+            .to([wheelPart5, wheelPart6], {
+              scale: 0.295,
+              duration: 0.15,
+              ease: 'power2.out'
+            })
+            .to([wheelPart5, wheelPart6], {
+              scale: 0.30,
+              duration: 0.2,
+              ease: 'power2.out'
+            })
+            // Longer pause between heartbeats
+            .to([wheelPart5, wheelPart6], {
+              scale: 0.30,
+              duration: 1,
+              ease: 'none'
+            });
+        }
+        
+        gsap.to(wheelPart6, {
+          opacity: 0.95,
+          filter: 'drop-shadow(0 0 30px rgba(255, 255, 255, 1))',
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      }
+    });
+    
+    element.addEventListener('mouseleave', () => {
+      if (!gameConfig.spinning.isSpinning) {
+        // Restart normal heartbeat pulsation
+        startWheelPart6Breathing();
+        
+        gsap.to(wheelPart6, {
+          opacity: 1,
+          filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))',
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      }
+    });
+  });
+}
+
 // Wheel spinning animation function
 function spinWheel(targetSector) {
   const wheelWrapper = document.querySelector('.wheel-wrapper');
@@ -1164,6 +1310,11 @@ function spinWheel(targetSector) {
       // Slow down wheel-part3 shine after wheel stops
       slowDownWheelPart3Shine();
       
+      // Restart wheel-part6 breathing animation after wheel stops (with delay to avoid conflict)
+      setTimeout(() => {
+        startWheelPart6Breathing();
+      }, 1000); // Wait for button animation to complete
+      
       // Scale part4 back to normal when wheel stops with brightness flash
       const part4 = document.querySelector('.wheel-part4');
       const part5 = document.querySelector('.wheel-part5');
@@ -1171,9 +1322,13 @@ function spinWheel(targetSector) {
       const wheelWrapper = document.querySelector('.wheel-wrapper');
       const arrow = document.querySelector('.arrow');
       
+      // Restore cursor pointer after wheel stops
+      if (part5) part5.style.cursor = 'pointer';
+      if (part6) part6.style.cursor = 'pointer';
+      
       gsap.timeline()
         .to(part4, { duration: 0.1, scale: 1, ease: "power2.out" })
-        .to([part5, part6], { duration: 0.5, scale: 0.30, ease: "back.out(1.5)" }, 0)
+        .to([part5, part6], { duration: 0.8, scale: 0.30, ease: "elastic.out(1, 0.5)" }, 0)
         .call(() => {
           // Create shine effect when wheel stops
           createWheelText1Shine();

@@ -378,6 +378,8 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 7;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  cursor: pointer;
 }
 
 .wheel-part6 {
@@ -392,6 +394,8 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 8;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  cursor: pointer;
 }
 
 .arrow {
