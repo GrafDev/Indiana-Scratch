@@ -181,25 +181,40 @@ body {
 }
 
 .man1, .man2, .box-man1, .box-man2 {
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
   width: var(--man-width, 105px);
   height: var(--man-height, 150px);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .box-man1, .box-man2 {
   opacity: 0;
 }
 
-.man1, .box-man1 {
-  background-image: url('../images/man1.png');
+.man1 img, .box-man1 img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.man1-part1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.man1-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .man2, .box-man2 {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
   background-image: url('../images/man2.png');
 }
 

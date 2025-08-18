@@ -12,6 +12,8 @@ import logo1Part2Img from '../images/logo1-part2.png'
 import logo2Part1Img from '../images/logo2-part1.png'
 import logo2Part2Img from '../images/logo2-part2.png'
 import man1Img from '../images/man1.png'
+import man1Part1Img from '../images/man1-part1.png'
+import man1Part2Img from '../images/man1-part2.png'
 import man2Img from '../images/man2.png'
 import titleImg from '../images/title.png'
 import wheelPart1Img from '../images/wheel-part1.png'
@@ -40,7 +42,10 @@ document.querySelector('#app').innerHTML = `
         <img src="${logo2Part2Img}" alt="Logo 2 Part 2" class="logo2-part2">
       </div>
       <div class="title"></div>
-      <div class="man1"></div>
+      <div class="man1">
+        <img src="${man1Part1Img}" alt="Man 1 Part 1" class="man1-part1">
+        <img src="${man1Part2Img}" alt="Man 1 Part 2" class="man1-part2">
+      </div>
       <div class="wheel-container">
         <div class="wheel-wrapper">
           <div class="wheel-part1"></div>
@@ -62,7 +67,10 @@ document.querySelector('#app').innerHTML = `
           <img src="${logo1Part1Img}" alt="Logo 1 Part 1" class="logo1-part1">
           <img src="${logo1Part2Img}" alt="Logo 1 Part 2" class="logo1-part2">
         </div>
-        <div class="box-man1"></div>
+        <div class="box-man1">
+          <img src="${man1Part1Img}" alt="Man 1 Part 1" class="man1-part1">
+          <img src="${man1Part2Img}" alt="Man 1 Part 2" class="man1-part2">
+        </div>
         <div class="spacer"></div>
       </div>
       <div class="box2">
@@ -489,6 +497,12 @@ setTimeout(() => {
     initButtonHandlers();
     // Start wheel-text1 pulsing after appears animation
     startWheelText1Pulsing();
+    // Start logo1-part2 brightness animation
+    startLogo1Part2Brightness();
+    // Start logo2-part2 brightness animation
+    startLogo2Part2Brightness();
+    // Start man1-part2 brightness animation
+    startMan1Part2Brightness();
     
     // Auto start first spin in auto mode after all animations
     if (gameMode === 'auto') {
@@ -620,6 +634,63 @@ function stopPart4Pulsing() {
 // Variable to store wheel-text1 pulsing animation
 let wheelText1PulsingAnimation = null;
 
+// Variable to store logo1-part2 brightness animation
+let logo1Part2BrightnessAnimation = null;
+
+// Variable to store logo2-part2 brightness animation
+let logo2Part2BrightnessAnimation = null;
+
+// Variable to store man1-part2 brightness animation
+let man1Part2BrightnessAnimation = null;
+
+// Function to create wheel-text1 shine effect on wheel stop
+function createWheelText1Shine() {
+  const wheelText1 = document.querySelector('.wheel-text1');
+  if (!wheelText1) return;
+  
+  // Strobe effect with multiple flashes
+  gsap.timeline()
+    // First big flash
+    .to(wheelText1, {
+      filter: "brightness(3) drop-shadow(0 0 25px rgba(255,255,255,1))",
+      duration: 0.08,
+      ease: "power2.out"
+    })
+    .to(wheelText1, {
+      filter: "brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,0.3))",
+      duration: 0.12,
+      ease: "power2.out"
+    })
+    // Second flash (smaller)
+    .to(wheelText1, {
+      filter: "brightness(2.2) drop-shadow(0 0 18px rgba(255,255,255,0.8))",
+      duration: 0.06,
+      ease: "power2.out"
+    })
+    .to(wheelText1, {
+      filter: "brightness(1.1) drop-shadow(0 0 3px rgba(255,255,255,0.2))",
+      duration: 0.1,
+      ease: "power2.out"
+    })
+    // Third flash (quick)
+    .to(wheelText1, {
+      filter: "brightness(2.8) drop-shadow(0 0 22px rgba(255,255,255,0.9))",
+      duration: 0.05,
+      ease: "power2.out"
+    })
+    .to(wheelText1, {
+      filter: "brightness(1.05) drop-shadow(0 0 2px rgba(255,255,255,0.1))",
+      duration: 0.08,
+      ease: "power2.out"
+    })
+    // Final fade out
+    .to(wheelText1, {
+      filter: "brightness(1) drop-shadow(0 0 0px rgba(255,255,255,0))",
+      duration: 0.5,
+      ease: "power2.out"
+    });
+}
+
 // Start wheel-text1 concentric pulsing animation
 function startWheelText1Pulsing() {
   const wheelText1 = document.querySelector('.wheel-text1');
@@ -654,6 +725,105 @@ function stopWheelText1Pulsing() {
         opacity: 1
       });
     }
+  }
+}
+
+// Start logo1-part2 brightness animation
+function startLogo1Part2Brightness() {
+  const logo1Part2Elements = document.querySelectorAll('.logo1-part2');
+  
+  // Stop existing animation if running
+  if (logo1Part2BrightnessAnimation) {
+    logo1Part2BrightnessAnimation.kill();
+  }
+  
+  // Create infinite brightness pulsing animation
+  logo1Part2BrightnessAnimation = gsap.fromTo(logo1Part2Elements, {
+    filter: "brightness(0.7)"
+  }, {
+    filter: "brightness(1.4)",
+    duration: 1.2,
+    ease: "power2.inOut",
+    yoyo: true,
+    repeat: -1
+  });
+}
+
+// Stop logo1-part2 brightness animation
+function stopLogo1Part2Brightness() {
+  if (logo1Part2BrightnessAnimation) {
+    logo1Part2BrightnessAnimation.kill();
+    logo1Part2BrightnessAnimation = null;
+    
+    // Reset to normal brightness
+    const logo1Part2Elements = document.querySelectorAll('.logo1-part2');
+    gsap.set(logo1Part2Elements, { filter: "brightness(1)" });
+  }
+}
+
+// Start logo2-part2 brightness animation
+function startLogo2Part2Brightness() {
+  const logo2Part2Elements = document.querySelectorAll('.logo2-part2');
+  
+  // Stop existing animation if running
+  if (logo2Part2BrightnessAnimation) {
+    logo2Part2BrightnessAnimation.kill();
+  }
+  
+  // Create infinite brightness pulsing animation
+  logo2Part2BrightnessAnimation = gsap.fromTo(logo2Part2Elements, {
+    filter: "brightness(0.7)"
+  }, {
+    filter: "brightness(1.4)",
+    duration: 1.2,
+    ease: "power2.inOut",
+    yoyo: true,
+    repeat: -1
+  });
+}
+
+// Stop logo2-part2 brightness animation
+function stopLogo2Part2Brightness() {
+  if (logo2Part2BrightnessAnimation) {
+    logo2Part2BrightnessAnimation.kill();
+    logo2Part2BrightnessAnimation = null;
+    
+    // Reset to normal brightness
+    const logo2Part2Elements = document.querySelectorAll('.logo2-part2');
+    gsap.set(logo2Part2Elements, { filter: "brightness(1)" });
+  }
+}
+
+// Start man1-part2 brightness animation
+function startMan1Part2Brightness() {
+  const man1Part2Elements = document.querySelectorAll('.man1-part2');
+  
+  // Stop existing animation if running
+  if (man1Part2BrightnessAnimation) {
+    man1Part2BrightnessAnimation.kill();
+  }
+  
+  // Simple brightness pulsing animation like logos
+  man1Part2BrightnessAnimation = gsap.fromTo(man1Part2Elements, {
+    filter: "brightness(0.7)"
+  }, {
+    filter: "brightness(1.4)",
+    duration: 1.2,
+    ease: "power2.inOut",
+    yoyo: true,
+    repeat: -1
+  });
+}
+
+// Stop man1-part2 brightness animation
+function stopMan1Part2Brightness() {
+  if (man1Part2BrightnessAnimation) {
+    man1Part2BrightnessAnimation.kill();
+    man1Part2BrightnessAnimation = null;
+    
+    // Reset to normal brightness
+    const man1Part2Elements = document.querySelectorAll('.man1-part2');
+    gsap.set(man1Part2Elements, { filter: "brightness(1)" });
   }
 }
 
@@ -695,8 +865,13 @@ function spinWheel(targetSector) {
         .to(part4, { duration: 0.1, scale: 1, ease: "power2.out" })
         .to([part5, part6], { duration: 0.5, scale: 0.30, ease: "back.out(1.5)" }, 0)
         .call(() => {
-          // Start wheel-text1 pulsing animation after wheel stops
-          startWheelText1Pulsing();
+          // Create shine effect when wheel stops
+          createWheelText1Shine();
+          
+          // Start wheel-text1 pulsing animation after wheel stops and shine effect
+          setTimeout(() => {
+            startWheelText1Pulsing();
+          }, 1000); // Wait for shine effect to complete (1.0s)
           
           // Auto spin next wheel if in auto mode
           if (gameMode === 'auto') {
