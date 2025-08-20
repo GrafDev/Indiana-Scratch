@@ -642,7 +642,7 @@ function initButtonHandlers() {
       if (part6) {
         gsap.set(part6, {
           opacity: 1,
-          filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
+          filter: 'drop-shadow(0 6px 10px rgba(0, 0, 0, 1))'
         });
       }
       
@@ -1247,7 +1247,7 @@ function stopWheelPart6Breathing() {
     if (wheelPart5 && wheelPart6) {
       gsap.set([wheelPart5, wheelPart6], { 
         scale: 0.3,
-        filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
+        filter: 'drop-shadow(0 6px 10px rgba(0, 0, 0, 1))'
       });
     }
   }
@@ -1497,7 +1497,7 @@ function addWheelPart6HoverControls() {
         
         gsap.to(wheelPart6, {
           opacity: 1,
-          filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))',
+          filter: 'drop-shadow(0 6px 10px rgba(0, 0, 0, 1))',
           duration: 0.3,
           ease: 'power2.out'
         });
@@ -1635,6 +1635,9 @@ function spinWheel(targetSector) {
 function showModal() {
   const modalOverlay = document.getElementById('modalOverlay');
   
+  // Disable other animations during modal
+  document.body.classList.add('modal-active');
+  
   if (modalOverlay) {
     // Update modal size to match current wheel size with aspect ratio 1.29
     const wheelSize = calculateWheelSize();
@@ -1660,6 +1663,14 @@ function showModal() {
       // Show modal to get dimensions
       modalOverlay.style.display = 'flex';
       modalOverlay.style.opacity = '0';
+      
+      // Create shine elements
+      const shine1 = document.createElement('div');
+      shine1.className = 'modal-shine-1';
+      const shine2 = document.createElement('div');
+      shine2.className = 'modal-shine-1 modal-shine-perpendicular';
+      modalOverlay.appendChild(shine1);
+      modalOverlay.appendChild(shine2);
       
       const centerImg = centerContainer.querySelector('img');
       const modalBackground = document.querySelector('.modal-background');
@@ -1719,6 +1730,36 @@ function showModal() {
           scale: 1.5,
           ease: "back.out(2.5)"
         }, 1.2)
+        .to('.modal-shine-1', {
+          duration: 0.1,
+          opacity: 1,
+          ease: "power2.out"
+        }, 1.2)
+        .to('.modal-shine-1', {
+          duration: 0.1,
+          opacity: 0,
+          ease: "power2.out"
+        }, 1.3)
+        .to('.modal-shine-1', {
+          duration: 0.1,
+          opacity: 1,
+          ease: "power2.out"
+        }, 1.4)
+        .to('.modal-shine-1', {
+          duration: 0.1,
+          opacity: 0,
+          ease: "power2.out"
+        }, 1.5)
+        .to('.modal-shine-1', {
+          duration: 0.2,
+          opacity: 1,
+          ease: "power2.out"
+        }, 1.6)
+        .to('.modal-bg-center img', {
+          duration: 0.3,
+          filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.2))',
+          ease: "power2.out"
+        }, 1.6)
         .call(() => {
           // Start continuous shine animation and add hover controls
           startModalButtonShine();
@@ -1730,6 +1771,9 @@ function showModal() {
 
 function hideModal() {
   const modalOverlay = document.getElementById('modalOverlay');
+  
+  // Re-enable other animations
+  document.body.classList.remove('modal-active');
   
   if (modalOverlay) {
     // Animate modal disappearance

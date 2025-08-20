@@ -127,12 +127,14 @@ body {
   position: relative;
   width: var(--logo1-width, 20vw);
   height: calc(var(--logo1-height, auto) * 0.6);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
 .box-logo1 {
   display: inline-block;
   position: relative;
   width: var(--logo1-width, 20vw);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
 .logo1 img, .box-logo1 img {
@@ -159,12 +161,14 @@ body {
   position: relative;
   width: var(--logo2-width, 30vw);
   height: calc(var(--logo2-height, auto) * 0.6);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
 .box-logo2 {
   display: inline-block;
   position: relative;
   width: var(--logo2-width, 30vw);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
 .logo2 img, .box-logo2 img {
@@ -187,6 +191,7 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
 }
 
 .box-man1, .box-man2 {
@@ -311,6 +316,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
 .wheel-container {
@@ -392,7 +398,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 7;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 1));
   cursor: pointer;
 }
 
@@ -408,7 +414,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 8;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 1));
   cursor: pointer;
 }
 
@@ -491,6 +497,65 @@ h1 {
   z-index: 10000;
   opacity: 0;
   backdrop-filter: blur(5px);
+  overflow: hidden;
+}
+
+.modal-shine-1,
+.modal-shine-2 {
+  position: absolute;
+  top: -75%;
+  left: -75%;
+  width: 250%;
+  height: 250%;
+  animation: rotate-shine 5s linear infinite;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.modal-shine-1 {
+  background: 
+    conic-gradient(from 0deg, rgba(255, 255, 255, 0) 0deg, rgba(255, 255, 255, 0.05) 50deg, rgba(255, 255, 255, 0.1) 70deg, rgba(255, 255, 255, 0.25) 90deg, rgba(255, 255, 255, 0.1) 110deg, rgba(255, 255, 255, 0.05) 130deg, rgba(255, 255, 255, 0) 180deg, rgba(255, 255, 255, 0.04) 230deg, rgba(255, 255, 255, 0.08) 250deg, rgba(255, 255, 255, 0.2) 270deg, rgba(255, 255, 255, 0.08) 290deg, rgba(255, 255, 255, 0.04) 310deg, rgba(255, 255, 255, 0) 360deg);
+}
+
+.modal-shine-perpendicular {
+  background: 
+    conic-gradient(from 90deg, rgba(255, 255, 255, 0) 0deg, rgba(255, 255, 255, 0.05) 50deg, rgba(255, 255, 255, 0.1) 70deg, rgba(255, 255, 255, 0.25) 90deg, rgba(255, 255, 255, 0.1) 110deg, rgba(255, 255, 255, 0.05) 130deg, rgba(255, 255, 255, 0) 180deg, rgba(255, 255, 255, 0.04) 230deg, rgba(255, 255, 255, 0.08) 250deg, rgba(255, 255, 255, 0.2) 270deg, rgba(255, 255, 255, 0.08) 290deg, rgba(255, 255, 255, 0.04) 310deg, rgba(255, 255, 255, 0) 360deg);
+}
+
+@keyframes rotate-shine {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes rotate-shine-reverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes glow-pulse {
+  0% { 
+    box-shadow: 
+      0 0 20px rgba(255, 255, 255, 0.3),
+      0 0 40px rgba(255, 255, 255, 0.2),
+      0 0 60px rgba(255, 255, 255, 0.1);
+  }
+  100% { 
+    box-shadow: 
+      0 0 30px rgba(255, 255, 255, 0.5),
+      0 0 60px rgba(255, 255, 255, 0.3),
+      0 0 90px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Disable animations when modal is active */
+body.modal-active .wheel-part1,
+body.modal-active .wheel-part2,
+body.modal-active .wheel-part3,
+body.modal-active .wheel-part4,
+body.modal-active .wheel-part5,
+body.modal-active .wheel-part6,
+body.modal-active .arrow {
+  animation-play-state: paused !important;
 }
 
 .modal-content {
@@ -564,6 +629,8 @@ h1 {
   width: auto;
   object-fit: cover;
   object-position: center;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0)) drop-shadow(0 0 40px rgba(255, 255, 255, 0));
+  transition: filter 0.3s ease;
 }
 
 
