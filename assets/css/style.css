@@ -67,7 +67,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  max-width: calc(var(--max-media-gap, 100vw) + 200px);
+  max-width: 100vw;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -84,16 +84,14 @@ body {
   justify-content: flex-end;
   pointer-events: auto;
   height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .box1 {
-  padding: 20px;
-  padding-right: 0;
 }
 
 .box2 {
-  padding: 20px;
-  padding-left: 0;
 }
 
 
@@ -106,8 +104,9 @@ body {
   }
   
   .media-container {
-    max-width: calc(var(--max-media-gap, 100vw) * 1.1 + 200px);
+    max-width: 100vw;
   }
+  
 }
 
 /* Desktop styles */
@@ -118,8 +117,9 @@ body {
   }
   
   .media-container {
-    max-width: calc(var(--max-media-gap, 100vw) * 1.2 + 200px);
+    max-width: 100vw;
   }
+  
 }
 
 .logo1 {
@@ -150,7 +150,7 @@ body {
 }
 
 
-.man1, .man2, .box-man1, .box-man2 {
+.man1, .man2 {
   width: var(--man-width, 105px);
   height: var(--man-height, 150px);
   display: flex;
@@ -161,14 +161,31 @@ body {
 }
 
 .box-man1, .box-man2 {
-  opacity: 1;
   position: relative;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
+  opacity: 1;
+  height: 66.67vh;
 }
 
 .man1 img, .box-man1 img {
   width: 100%;
   height: auto;
   display: block;
+}
+
+.box-man1 img {
+  height: 100%;
+  width: auto;
+}
+
+.box-man1 .man1-part1 {
+  position: static;
+}
+
+.box-man1 .man1-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .man1-part1 {
@@ -187,6 +204,21 @@ body {
   width: 100%;
   height: auto;
   display: block;
+}
+
+.box-man2 img {
+  height: 100%;
+  width: auto;
+}
+
+.box-man2 .man2-part1 {
+  position: static;
+}
+
+.box-man2 .man2-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .man2-part1 {
