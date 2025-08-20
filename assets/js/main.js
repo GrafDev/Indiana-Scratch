@@ -255,8 +255,18 @@ function applyResponsiveSizing() {
   // Set modal size based on wheel size with aspect ratio 1.29
   const modalContent = document.querySelector('.modal-content');
   if (modalContent) {
-    modalContent.style.width = `${wheelSize}px`;
-    modalContent.style.height = `${wheelSize / 1.29}px`;
+    // Make modal bigger on mobile
+    const screenWidth = window.innerWidth;
+    const aspectRatio = screenWidth / window.innerHeight;
+    let modalWidth = wheelSize;
+    
+    if (aspectRatio < 0.6) {
+      // Mobile portrait: 95% of screen width
+      modalWidth = screenWidth * 0.95;
+    }
+    
+    modalContent.style.width = `${modalWidth}px`;
+    modalContent.style.height = `${modalWidth / 1.29}px`;
   }
   
   console.log(`Wheel size set to: ${wheelSize}px`);
@@ -1630,8 +1640,18 @@ function showModal() {
     const wheelSize = calculateWheelSize();
     const modalContent = document.querySelector('.modal-content');
     if (modalContent) {
-      modalContent.style.width = `${wheelSize}px`;
-      modalContent.style.height = `${wheelSize / 1.29}px`;
+      // Make modal bigger on mobile
+      const screenWidth = window.innerWidth;
+      const aspectRatio = screenWidth / window.innerHeight;
+      let modalWidth = wheelSize;
+      
+      if (aspectRatio < 0.6) {
+        // Mobile portrait: 95% of screen width
+        modalWidth = screenWidth * 0.95;
+      }
+      
+      modalContent.style.width = `${modalWidth}px`;
+      modalContent.style.height = `${modalWidth / 1.29}px`;
     }
     
     // Setup initial state BEFORE showing modal
@@ -1650,6 +1670,12 @@ function showModal() {
       gsap.set('.modal-bg-center', {
         width: `${startWidth}px`,
         overflow: 'hidden'
+      });
+      
+      // Set initial button state
+      gsap.set('.modal-button', {
+        opacity: 0,
+        scale: 0.2
       });
       
       // Force image natural width
@@ -1678,20 +1704,20 @@ function showModal() {
       // Now animate
       gsap.timeline()
         .to(modalOverlay, {
-          duration: 0.5,
+          duration: 0.3,
           opacity: 1,
           ease: "power2.out"
         })
         .to('.modal-bg-center', {
-          duration: 0.8,
+          duration: 0.5,
           width: `${finalWidth}px`,
           ease: "power2.out"
-        }, 0.4)
+        }, 0.2)
         .to('.modal-button', {
-          duration: 0.5,
+          duration: 0.4,
           opacity: 1,
-          scale: 1.4,
-          ease: "power1.out"
+          scale: 1.5,
+          ease: "back.out(2.5)"
         }, 1.2)
         .call(() => {
           // Start continuous shine animation and add hover controls
