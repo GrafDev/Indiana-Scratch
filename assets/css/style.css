@@ -81,7 +81,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-end;
   pointer-events: auto;
   height: 100%;
 }
@@ -130,14 +130,7 @@ body {
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
-.box-logo1 {
-  display: inline-block;
-  position: relative;
-  width: var(--logo1-width, 20vw);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-}
-
-.logo1 img, .box-logo1 img {
+.logo1 img {
   width: 100%;
   height: auto;
   display: block;
@@ -156,33 +149,6 @@ body {
   left: 0;
 }
 
-.logo2 {
-  display: inline-block;
-  position: relative;
-  width: var(--logo2-width, 30vw);
-  height: calc(var(--logo2-height, auto) * 0.6);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-}
-
-.box-logo2 {
-  display: inline-block;
-  position: relative;
-  width: var(--logo2-width, 30vw);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-}
-
-.logo2 img, .box-logo2 img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.logo2-part1,
-.logo2-part2 {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
 
 .man1, .man2, .box-man1, .box-man2 {
   width: var(--man-width, 105px);
@@ -195,7 +161,8 @@ body {
 }
 
 .box-man1, .box-man2 {
-  opacity: 0;
+  opacity: 1;
+  position: relative;
 }
 
 .man1 img, .box-man1 img {
@@ -269,42 +236,13 @@ body {
   }
 }
 
-/* Hide logo1 and logo2 in main-container on landscape orientation */
+/* Position logo1 in main-container on all orientations */
 @media (orientation: landscape) {
   .main-container {
     justify-content: space-around;
   }
-  
-  .main-container .logo1,
-  .main-container .logo2 {
-    display: none;
-  }
 }
 
-/* Hide logo1 and logo2 in media-container when they are visible in main-container (portrait) */
-@media (orientation: portrait) {
-  .box1 .box-logo1,
-  .box1 .logo2,
-  .box2 .logo1,
-  .box2 .box-logo2 {
-    display: none;
-  }
-  
-  /* Move mans higher when logos are hidden */
-  .box1,
-  .box2 {
-    justify-content: flex-start;
-  }
-}
-
-/* Tablet portrait - lower mans position */
-@media (min-aspect-ratio: 6/10) and (max-aspect-ratio: 13/10) and (orientation: portrait) {
-  .box1,
-  .box2 {
-    justify-content: flex-start;
-    padding-top: 30%;
-  }
-}
 
 .title {
   background-image: url('../images/title.png');
@@ -317,6 +255,16 @@ body {
   align-items: center;
   justify-content: center;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+/* Mobile title */
+@media (max-width: 768px), (max-aspect-ratio: 6/10) {
+  .title {
+    background-image: url('../images/title-mobile.png');
+    width: 80dvw;
+    height: auto;
+    aspect-ratio: 240/45; /* Сохраняем пропорции оригинального title */
+  }
 }
 
 .wheel-container {
@@ -467,7 +415,6 @@ h1 {
 .main-container .man1,
 .main-container .man2,
 .main-container .logo1,
-.main-container .logo2,
 .box1 .man1,
 .box2 .man2,
 .title,
