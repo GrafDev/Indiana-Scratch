@@ -252,11 +252,11 @@ function applyResponsiveSizing() {
   // Set default media gap
   document.documentElement.style.setProperty('--max-media-gap', `${wheelSize * 1.4}px`);
   
-  // Set modal size based on wheel size
+  // Set modal size based on wheel size with aspect ratio 1.29
   const modalContent = document.querySelector('.modal-content');
   if (modalContent) {
     modalContent.style.width = `${wheelSize}px`;
-    modalContent.style.height = `${wheelSize}px`;
+    modalContent.style.height = `${wheelSize / 1.29}px`;
   }
   
   console.log(`Wheel size set to: ${wheelSize}px`);
@@ -1626,12 +1626,12 @@ function showModal() {
   const modalOverlay = document.getElementById('modalOverlay');
   
   if (modalOverlay) {
-    // Update modal size to match current wheel size
+    // Update modal size to match current wheel size with aspect ratio 1.29
     const wheelSize = calculateWheelSize();
     const modalContent = document.querySelector('.modal-content');
     if (modalContent) {
       modalContent.style.width = `${wheelSize}px`;
-      modalContent.style.height = `${wheelSize}px`;
+      modalContent.style.height = `${wheelSize / 1.29}px`;
     }
     
     // Setup initial state BEFORE showing modal
@@ -1642,7 +1642,8 @@ function showModal() {
       modalOverlay.style.opacity = '0';
       
       const centerImg = centerContainer.querySelector('img');
-      const finalWidth = centerImg ? centerImg.naturalWidth : centerContainer.offsetWidth;
+      const modalBackground = document.querySelector('.modal-background');
+      const finalWidth = modalBackground.offsetWidth * 0.734; // 73.4% от ширины родителя
       const startWidth = finalWidth * 0.08; // 8% от финальной ширины
       
       // Set initial narrow state
@@ -1662,15 +1663,8 @@ function showModal() {
           console.log('Natural size:', img.naturalWidth, img.naturalHeight);
           console.log('Current size:', img.offsetWidth, img.offsetHeight);
           
-          // Принудительно через setAttribute
-          img.setAttribute('style', `
-            width: ${img.naturalWidth}px !important;
-            height: ${img.naturalHeight}px !important;
-            min-width: ${img.naturalWidth}px !important;
-            max-width: ${img.naturalWidth}px !important;
-            object-fit: none !important;
-            flex-shrink: 0 !important;
-          `);
+          // Убираем все принудительные стили
+          img.removeAttribute('style');
         };
         
         if (img.complete && img.naturalWidth > 0) {
