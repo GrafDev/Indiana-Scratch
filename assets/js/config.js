@@ -38,8 +38,8 @@ export const gameConfig = {
   // Element size ratios relative to wheel size
   elements: {
     logo1: {
-      widthRatio: 0.35,   // 35% of wheel size
-      heightRatio: 0.35,  // 35% of wheel size
+      widthRatio: 0.7,   // 70% of wheel size (увеличено в 2 раза)
+      heightRatio: 0.35,  // 35% of wheel size (оставляем исходную высоту)
     },
     logo2: {
       widthRatio: 0.35,   // 35% of wheel size
