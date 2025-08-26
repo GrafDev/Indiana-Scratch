@@ -1,0 +1,91 @@
+.main-container {
+  max-width: min(650px, 95vw);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px 0 20px 0;
+  box-sizing: border-box;
+}
+
+.media-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.box1, .box2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: auto;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.game-container {
+  width: var(--game-container-width, 300px);
+  height: var(--game-container-height, 300px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Tablet styles */
+@media (min-aspect-ratio: 6/10) and (max-aspect-ratio: 13/10) {
+  .game-container {
+    width: calc(var(--game-container-width, 300px) * 0.9);
+    height: calc(var(--game-container-height, 300px) * 0.9);
+  }
+  
+  .media-container {
+    max-width: 100vw;
+  }
+}
+
+/* Desktop styles */
+@media (min-aspect-ratio: 13/10) {
+  .game-container {
+    width: calc(var(--game-container-width, 300px) * 0.8);
+    height: calc(var(--game-container-height, 300px) * 0.8);
+  }
+  
+  .media-container {
+    max-width: 100vw;
+  }
+}
+
+/* Tablet portrait - move wheel up */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .main-container {
+    padding-bottom: 15vh;
+  }
+}
+
+/* All tablets in portrait */
+@media (orientation: portrait) and (min-width: 768px) {
+  .main-container {
+    padding-bottom: 15vh;
+  }
+}
+
+/* Position logo1 in main-container on all orientations */
+@media (orientation: landscape) {
+  .main-container {
+    justify-content: space-around;
+  }
+}

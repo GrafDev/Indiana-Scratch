@@ -9,6 +9,28 @@ export function generateHTML(isDevelopment) {
       </div>
       <div class="title"></div>
       <div class="game-container">
+        <div class="cards-container">
+          <div class="cards-top-row">
+            <div class="card-block">
+              <img src="assets/images/bg-cart.png" alt="Card Background" class="card-bg">
+              <img src="assets/images/first-cart.png" alt="First Card" class="card-first">
+              <img src="assets/images/blanket-cart.png" alt="Blanket Card" class="card-blanket">
+              <img src="assets/images/border-cart.png" alt="Card Border" class="card-border">
+            </div>
+            <div class="card-block">
+              <img src="assets/images/bg-cart.png" alt="Card Background" class="card-bg">
+              <img src="assets/images/first-cart.png" alt="First Card" class="card-first">
+              <img src="assets/images/blanket-cart.png" alt="Blanket Card" class="card-blanket">
+              <img src="assets/images/border-cart.png" alt="Card Border" class="card-border">
+            </div>
+          </div>
+          <div class="card-block">
+            <img src="assets/images/bg-cart.png" alt="Card Background" class="card-bg">
+            <img src="assets/images/first-cart.png" alt="First Card" class="card-first">
+            <img src="assets/images/blanket-cart.png" alt="Blanket Card" class="card-blanket">
+            <img src="assets/images/border-cart.png" alt="Card Border" class="card-border">
+          </div>
+        </div>
       </div>
     </div>
     <div class="media-container">

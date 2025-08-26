@@ -36,8 +36,8 @@ export default defineConfig(({ mode }) => {
             }
         },
         build: {
-            outDir: mode === 'auto' ? 'dist/wheel-visit-auto' : 
-                    mode === 'click' ? 'dist/wheel-visit-click' : 'dist',
+            outDir: mode === 'auto' ? 'dist/scratch-indiana-auto' : 
+                    mode === 'click' ? 'dist/scratch-indiana-click' : 'dist',
             assetsDir: 'assets',
             cssCodeSplit: true,
             cssMinify: true,

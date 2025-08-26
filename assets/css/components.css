@@ -1,0 +1,144 @@
+.logo1 {
+  display: inline-block;
+  position: relative;
+  width: var(--logo1-width, 20vw);
+  height: calc(var(--logo1-width, 20vw) / 3.6);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.logo1 img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.logo1-part1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.logo1-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.title {
+  background-image: url('../images/title.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: var(--title-width, 240px);
+  height: var(--title-height, 45px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.man1, .man2 {
+  width: var(--man-width, 105px);
+  height: var(--man-height, 150px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
+}
+
+.box-man1, .box-man2 {
+  position: relative;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
+  opacity: 1;
+  height: 75dvh;
+}
+
+@media (orientation: portrait) {
+  .box-man1, .box-man2 {
+    height: 50dvh;
+  }
+}
+
+.man1 img, .box-man1 img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.box-man1 img {
+  height: 100%;
+  width: auto;
+}
+
+.box-man1 .man1-part1 {
+  position: static;
+}
+
+.box-man1 .man1-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.man1-part1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.man1-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.man2 img, .box-man2 img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.box-man2 img {
+  height: 100%;
+  width: auto;
+}
+
+.box-man2 .man2-part1 {
+  position: static;
+}
+
+.box-man2 .man2-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.man2-part1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.man2-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Mobile title and logo */
+@media (max-width: 768px), (max-aspect-ratio: 6/10) {
+  .title {
+    background-image: url('../images/title-mobile.png');
+    width: 95dvw;
+    height: auto;
+    aspect-ratio: 240/45;
+  }
+  
+  .logo1 {
+    width: var(--logo1-width, 40vw);
+    height: calc(var(--logo1-width, 40vw) / 3.6);
+  }
+}

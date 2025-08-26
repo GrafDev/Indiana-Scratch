@@ -6,6 +6,7 @@ import { generateHTML } from './html-template.js'
 import { setupDevPanel, updateDevToggleText } from './dev-panel.js'
 import { applyResponsiveSizing } from './responsive-sizing.js'
 import { setupTouchControls } from './touch-controls.js'
+import { CardInteractions } from './card-interactions.js'
 
 // CONFIGURATION
 let gameMode = import.meta.env.VITE_GAME_MODE || 'click';
@@ -59,6 +60,22 @@ window.addEventListener('resize', applyResponsiveSizing);
 
 // Setup touch controls
 setupTouchControls();
+
+// Initialize card interactions
+const cardInteractions = new CardInteractions();
+
+// Listen for card revealed events
+document.addEventListener('cardRevealed', (e) => {
+  const { cardBlock, percentage } = e.detail;
+  console.log('Card revealed!', { cardBlock, percentage });
+  
+  // Here you can add game logic, like checking if all cards are revealed
+  const revealedCount = cardInteractions.getRevealedCardsCount();
+  if (revealedCount === 3) {
+    console.log('All cards revealed! Game complete.');
+    // Show modal or end game logic
+  }
+});
 
 // Initialize animations after DOM is ready
 setTimeout(() => {

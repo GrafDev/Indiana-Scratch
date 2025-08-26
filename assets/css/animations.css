@@ -1,0 +1,40 @@
+/* ANIMATIONS */
+
+/* Initial hidden state - все элементы анимации скрыты до инициализации GSAP */
+.main-container .logo1,
+.box1 .man1,
+.box2 .man2,
+.title {
+  opacity: 0;
+}
+
+/* Initial state for men - scale and position for entrance animation */
+.box1 .man1,
+.box2 .man2 {
+  transform: scale(0.3) translateY(50px);
+}
+
+@keyframes rotate-shine {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes rotate-shine-reverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes glow-pulse {
+  0% { 
+    box-shadow: 
+      0 0 20px rgba(255, 255, 255, 0.3),
+      0 0 40px rgba(255, 255, 255, 0.2),
+      0 0 60px rgba(255, 255, 255, 0.1);
+  }
+  100% { 
+    box-shadow: 
+      0 0 30px rgba(255, 255, 255, 0.5),
+      0 0 60px rgba(255, 255, 255, 0.3),
+      0 0 90px rgba(255, 255, 255, 0.2);
+  }
+}
