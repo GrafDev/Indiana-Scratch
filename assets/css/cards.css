@@ -61,7 +61,7 @@
 }
 
 .card-border {
-  z-index: 4;
+  z-index: 10;
 }
 
 /* Card interaction states */
@@ -70,7 +70,7 @@
 }
 
 .card-block:hover {
-  transform: scale(1.02);
+  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.6);
 }
 
 .card-processing {

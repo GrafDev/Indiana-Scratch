@@ -5,6 +5,7 @@ export class ImageEraser {
     this.canvas = null;
     this.ctx = null;
     this.lastStrokeEnd = null;
+    this.eraserTexture = null;
     
     // Default options
     this.options = {
@@ -14,6 +15,7 @@ export class ImageEraser {
     };
     
     this.init();
+    this.loadEraserTexture();
   }
   
   init() {
@@ -32,7 +34,7 @@ export class ImageEraser {
     this.canvas.style.width = '100%';
     this.canvas.style.height = '100%';
     this.canvas.style.pointerEvents = 'none';
-    this.canvas.style.zIndex = '10';
+    this.canvas.style.zIndex = '5';
     
     // Make image container relative
     this.image.parentElement.style.position = 'relative';
@@ -40,9 +42,13 @@ export class ImageEraser {
     // Draw image onto canvas
     this.drawImageOnCanvas();
     
-    // Position canvas over image and hide original image
+    // Position canvas over image
     this.image.parentElement.appendChild(this.canvas);
-    this.image.style.opacity = '0';
+    
+    // Hide original image after canvas is ready
+    setTimeout(() => {
+      this.image.style.opacity = '0';
+    }, 100);
     
     console.log('Canvas visible:', this.canvas.style.opacity !== '0');
     console.log('Canvas display:', this.canvas.style.display);
@@ -52,6 +58,18 @@ export class ImageEraser {
     
     // Add event listeners
     this.addEventListeners();
+  }
+  
+  loadEraserTexture() {
+    const img = new Image();
+    img.onload = () => {
+      this.eraserTexture = img;
+      console.log('Eraser texture loaded:', img.width, 'x', img.height);
+    };
+    img.onerror = () => {
+      console.error('Failed to load eraser texture');
+    };
+    img.src = 'assets/images/scratch.png';
   }
   
   drawImageOnCanvas() {
@@ -102,7 +120,7 @@ export class ImageEraser {
   autoErase(targetPercentage = 70, duration = 1000) {
     return new Promise((resolve) => {
       const startTime = Date.now();
-      const totalStrokes = 5; // Fewer strokes
+      const totalStrokes = 10;
       let strokesCreated = 0;
       this.lastStrokeEnd = null;
       
@@ -168,53 +186,44 @@ export class ImageEraser {
     
     this.ctx.globalCompositeOperation = 'destination-out';
     
-    // Create irregular eraser brush along the stroke path
-    const brushSteps = 25; // More stamps for bigger stroke coverage
-    
-    for (let step = 0; step <= brushSteps; step++) {
-      const t = step / brushSteps; // Position along stroke from 0 to 1
-      const baseX = centerX + Math.cos(angle) * strokeLength * t;
-      const baseY = centerY + Math.sin(angle) * strokeLength * t;
-      
-      // Create irregular brush stamp at this position
-      this.createIrregularBrush(baseX, baseY);
-    }
+    // Animate dots moving along the stroke path
+    this.animateMovingDots(centerX, centerY, angle, strokeLength);
   }
   
-  // Create an irregular brush stamp with big center circle and small perimeter circles
-  createIrregularBrush(x, y) {
-    const mainRadius = this.options.eraserSize * 12; // Smaller main circle
-    
-    // Check bounds to ensure circles don't go outside canvas
-    const margin = mainRadius + this.options.eraserSize * 0.8; // Safety margin
-    if (x < margin || x > this.canvas.width - margin || 
-        y < margin || y > this.canvas.height - margin) {
-      return; // Skip if too close to edges
+  // Move eraser image along stroke path
+  animateMovingDots(startX, startY, angle, maxLength) {
+    if (!this.eraserTexture) {
+      console.warn('Eraser texture not loaded yet');
+      return;
     }
     
-    // Draw main center circle
-    this.ctx.beginPath();
-    this.ctx.arc(x, y, mainRadius, 0, Math.PI * 2);
-    this.ctx.fill();
+    const strokeLength = maxLength * 0.8;
+    const endX = startX + Math.cos(angle) * strokeLength;
+    const endY = startY + Math.sin(angle) * strokeLength;
     
-    // Add small circles around the perimeter
-    const perimeterCircles = 25; // More circles
+    // Draw the eraser image as it moves from start to end
+    const imageWidth = this.options.eraserSize * 22;
+    const imageHeight = this.options.eraserSize * 22;
     
-    for (let i = 0; i < perimeterCircles; i++) {
-      const perimeterAngle = (i / perimeterCircles) * Math.PI * 2 + Math.random() * 0.2; // Slight randomness
-      const perimeterDistance = mainRadius + this.options.eraserSize * (0.2 + Math.random() * 0.3);
+    // Create smooth path by drawing image at multiple positions
+    const steps = 100;
+    for (let i = 0; i <= steps; i++) {
+      const progress = i / steps;
+      const currentX = startX + (endX - startX) * progress;
+      const currentY = startY + (endY - startY) * progress;
       
-      const smallX = x + Math.cos(perimeterAngle) * perimeterDistance;
-      const smallY = y + Math.sin(perimeterAngle) * perimeterDistance;
-      const smallRadius = this.options.eraserSize * (0.2 + Math.random() * 0.5); // Random sizes 0.2x to 0.7x
+      // Check canvas boundaries
+      const drawX = Math.max(0, Math.min(this.canvas.width - imageWidth, currentX - imageWidth/2));
+      const drawY = Math.max(0, Math.min(this.canvas.height - imageHeight, currentY - imageHeight/2));
       
-      // Check if small circle is within bounds
-      if (smallX - smallRadius > 0 && smallX + smallRadius < this.canvas.width &&
-          smallY - smallRadius > 0 && smallY + smallRadius < this.canvas.height) {
-        this.ctx.beginPath();
-        this.ctx.arc(smallX, smallY, smallRadius, 0, Math.PI * 2);
-        this.ctx.fill();
-      }
+      // Draw eraser image at current position
+      this.ctx.drawImage(
+        this.eraserTexture,
+        drawX,
+        drawY,
+        imageWidth,
+        imageHeight
+      );
     }
   }
   
