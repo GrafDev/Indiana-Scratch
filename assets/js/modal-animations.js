@@ -19,8 +19,8 @@ export function showModal() {
       let modalWidth = wheelSize;
       
       if (aspectRatio < 0.6) {
-        // Mobile portrait: 95% of screen width
-        modalWidth = screenWidth * 0.95;
+        // Mobile portrait: 75% of screen width
+        modalWidth = screenWidth * 0.75;
       }
       
       modalContent.style.width = `${modalWidth}px`;
@@ -44,7 +44,7 @@ export function showModal() {
       
       const centerImg = centerContainer.querySelector('img');
       const modalBackground = document.querySelector('.modal-background');
-      const finalWidth = modalBackground.offsetWidth * 0.734; // 73.4% от ширины родителя
+      const finalWidth = modalBackground.offsetWidth * 1.04; // 104% от ширины родителя
       const startWidth = finalWidth * 0.08; // 8% от финальной ширины
       
       // Set initial narrow state
@@ -54,7 +54,7 @@ export function showModal() {
       });
       
       // Set initial button state
-      gsap.set('.modal-button', {
+      gsap.set('.modal-button-container', {
         opacity: 0,
         scale: 0.2
       });
@@ -94,7 +94,7 @@ export function showModal() {
           width: `${finalWidth}px`,
           ease: "power2.out"
         }, 0.2)
-        .to('.modal-button', {
+        .to('.modal-button-container', {
           duration: 0.4,
           opacity: 1,
           scale: 1.5,
@@ -125,15 +125,8 @@ export function showModal() {
           opacity: 1,
           ease: "power2.out"
         }, 1.6)
-        .to('.modal-bg-center img', {
-          duration: 0.3,
-          filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.2))',
-          ease: "power2.out"
-        }, 1.6)
         .call(() => {
-          // Start continuous shine animation and add hover controls
-          startModalButtonShine();
-          addModalButtonHoverControls();
+          console.log('Modal animation complete');
         }, [], 1.7);
     }
   }

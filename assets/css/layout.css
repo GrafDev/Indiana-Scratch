@@ -86,6 +86,6 @@
 /* Position logo1 in main-container on all orientations */
 @media (orientation: landscape) {
   .main-container {
-    justify-content: space-around;
+    justify-content: flex-start;
   }
 }

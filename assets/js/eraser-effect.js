@@ -139,8 +139,11 @@ export class ImageEraser {
         if (progress < 1) {
           requestAnimationFrame(animate);
         } else {
+          // Add final horizontal stroke across center
+          this.createCenterHorizontalStroke();
+          
           this.ctx.globalCompositeOperation = 'source-over';
-          console.log(`Wipe complete: ${strokesCreated} strokes created`);
+          console.log(`Wipe complete: ${strokesCreated} strokes created + center stroke`);
           resolve(targetPercentage);
         }
       };
@@ -226,6 +229,42 @@ export class ImageEraser {
       );
     }
   }
+  
+  // Create horizontal stroke across center of card
+  createCenterHorizontalStroke() {
+    if (!this.eraserTexture) {
+      console.warn('Eraser texture not loaded yet');
+      return;
+    }
+    
+    const centerY = this.canvas.height / 2;
+    const strokeWidth = this.canvas.width * 0.55; // 55% of card width  
+    const strokeStart = (this.canvas.width - strokeWidth) / 2; // Center the stroke
+    const strokeEnd = strokeStart + strokeWidth;
+    
+    this.ctx.globalCompositeOperation = 'destination-out';
+    
+    // Draw horizontal stroke with eraser texture
+    const imageWidth = this.options.eraserSize * 22;
+    const imageHeight = this.options.eraserSize * 22;
+    const steps = 80;
+    
+    for (let i = 0; i <= steps; i++) {
+      const progress = i / steps;
+      const currentX = strokeStart + (strokeEnd - strokeStart) * progress;
+      const currentY = centerY;
+      
+      // Draw eraser image at current position
+      this.ctx.drawImage(
+        this.eraserTexture,
+        currentX - imageWidth/2,
+        currentY - imageHeight/2,
+        imageWidth,
+        imageHeight
+      );
+    }
+  }
+  
   
   // Auto erase with pattern (more controlled)
   autoErasePattern(targetPercentage = 70) {
