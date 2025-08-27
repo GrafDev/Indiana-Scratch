@@ -20,7 +20,7 @@ export function initializeEntranceAnimations() {
       opacity: 1,
       ease: "power2.out"
     }, 0.2)
-    .to('.cards-container', {
+    .to('.cards-container, .wheel-container', {
       duration: 0.6,
       opacity: 1,
       y: 0,
@@ -32,6 +32,27 @@ export function initializeEntranceAnimations() {
       scale: 1,
       stagger: 0.1,
       ease: "back.out(1.5)"
+    }, 0.6)
+    // Wheel entrance animations (Visit Wheel style)
+    .to('.wheel-wrapper', {
+      duration: 1.0,
+      scale: 1,
+      rotation: 0,
+      opacity: 1,
+      ease: "back.out(1.5)"
+    }, 0.4)
+    .to(['.wheel-part5', '.wheel-part6'], {
+      duration: 0.6,
+      scale: 1.0,
+      opacity: 1,
+      ease: "back.out(1.5)"
+    }, 0.6)
+    .to('.arrow', {
+      duration: 0.7,
+      y: 0,
+      scale: 1,
+      opacity: 1,
+      ease: "bounce.out"
     }, 0.6)
     .call(() => {
       // Start logo continuous animation after entrance is complete

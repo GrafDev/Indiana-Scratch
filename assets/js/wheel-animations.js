@@ -1,104 +1,117 @@
 import { gsap } from 'gsap';
 
-// Wheel animations for Indiana Scratch wheel variant
+// Wheel animations based on Visit Wheel logic
 export class WheelAnimations {
     
-    static wheelSpin(wheelElement, currentRotation, spinCount, gameMode = 'click') {
+    static wheelSpin(currentRotation, targetDegrees) {
+        const wheelWrapper = document.querySelector('.wheel-wrapper');
+        if (!wheelWrapper) {
+            console.warn('Wheel wrapper not found');
+            return Promise.resolve();
+        }
+
         return new Promise((resolve) => {
-            if (!wheelElement) {
-                console.warn('Wheel element not found');
-                resolve();
-                return;
-            }
+            const minSpins = 5;
+            const maxSpins = 7;
+            const randomSpins = Math.floor(Math.random() * (maxSpins - minSpins + 1)) + minSpins;
+            
+            // Add overshoot for spring effect
+            const overshoot = 10; // degrees
+            const totalRotationWithOvershoot = currentRotation + (randomSpins * 360) + targetDegrees + overshoot;
+            const finalRotation = currentRotation + (randomSpins * 360) + targetDegrees;
+            
+            console.log(`Spinning to ${targetDegrees}°, total rotation: ${finalRotation}`);
+            
+            // Two-stage animation: fast spin + spring settle
+            gsap.timeline()
+                .to(wheelWrapper, {
+                    rotation: totalRotationWithOvershoot,
+                    duration: 3.5 + Math.random() * 0.5,
+                    ease: "power2.out"
+                })
+                .to(wheelWrapper, {
+                    rotation: finalRotation,
+                    duration: 0.8,
+                    ease: "elastic.out(2, 0.3)",
+                    onComplete: () => {
+                        resolve(finalRotation);
+                    }
+                });
+        });
+    }
 
-            // Calculate spin parameters
-            const baseSpins = 3; // Minimum full rotations
-            const randomSpins = Math.random() * 2; // 0-2 additional spins
-            const totalSpins = baseSpins + randomSpins;
-            
-            // Final position (where wheel stops)
-            const finalPositions = [0, 60, 120, 180, 240, 300]; // 6 sectors, 60 degrees each
-            const randomPosition = finalPositions[Math.floor(Math.random() * finalPositions.length)];
-            
-            const totalRotation = currentRotation + (totalSpins * 360) + randomPosition;
-            
-            // Animation duration
-            const duration = 3 + Math.random() * 2; // 3-5 seconds
-            
-            gsap.to(wheelElement, {
-                rotation: totalRotation,
-                duration: duration,
-                ease: "power3.out",
-                onComplete: () => {
-                    resolve();
-                }
+    static buttonPress() {
+        const part5 = document.querySelector('.wheel-part5');
+        const part6 = document.querySelector('.wheel-part6');
+        
+        if (!part5 || !part6) return;
+        
+        return gsap.timeline()
+            .to([part5, part6], { 
+                duration: 0.15, 
+                scale: 0.88,
+                rotate: -5,
+                ease: 'back.in(1.5)' 
+            })
+            .to([part5, part6], { 
+                duration: 0.4, 
+                scale: 1.12, 
+                rotate: 3,
+                ease: "elastic.out(1.2, 0.6)" 
+            })
+            .to([part5, part6], { 
+                duration: 0.3, 
+                scale: 1.0,
+                rotate: 0,
+                ease: "power2.out" 
             });
-        });
     }
 
-    static buttonGlow(buttonElement) {
-        if (!buttonElement) return;
+    static entranceAnimations() {
+        // Similar to Visit Wheel entrance animations
+        const tl = gsap.timeline();
         
-        gsap.set(buttonElement, {
-            filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.8))'
+        // Set initial states
+        tl.set('.wheel-wrapper', {
+            opacity: 0,
+            scale: 0.2,
+            rotation: -90
+        })
+        .set(['.wheel-part5', '.wheel-part6'], {
+            opacity: 0,
+            scale: 0
+        })
+        .set('.wheel-part4', {
+            opacity: 0
+        })
+        .set('.arrow', {
+            opacity: 0,
+            y: -150,
+            scale: 0
         });
         
-        gsap.to(buttonElement, {
-            filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 1))',
-            duration: 1,
-            repeat: -1,
-            yoyo: true,
-            ease: "power2.inOut"
-        });
-    }
-
-    static stopButtonGlow(buttonElement) {
-        if (!buttonElement) return;
+        // Entrance animations
+        tl.to('.wheel-wrapper', {
+            duration: 1.0,
+            scale: 1,
+            rotation: 0,
+            opacity: 1,
+            ease: "back.out(1.5)"
+        }, 0)
+        .to(['.wheel-part5', '.wheel-part6'], {
+            duration: 0.6,
+            scale: 1.0,
+            opacity: 1,
+            ease: "back.out(1.5)"
+        }, 0.6)
+        .to('.arrow', {
+            duration: 0.7,
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            ease: "bounce.out"
+        }, 0);
         
-        gsap.killTweensOf(buttonElement);
-        gsap.to(buttonElement, {
-            filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3))',
-            duration: 0.3
-        });
-    }
-
-    static showModal(modalElement) {
-        if (!modalElement) return;
-        
-        modalElement.style.display = 'flex';
-        
-        gsap.timeline()
-            .set(modalElement, { opacity: 0 })
-            .to(modalElement, {
-                opacity: 1,
-                duration: 0.5,
-                ease: "power2.out"
-            })
-            .from('.modal-content', {
-                scale: 0.3,
-                rotation: 180,
-                duration: 0.8,
-                ease: "back.out(1.7)"
-            }, 0.2);
-    }
-
-    static hideModal(modalElement) {
-        if (!modalElement) return;
-        
-        gsap.timeline()
-            .to('.modal-content', {
-                scale: 0.3,
-                rotation: -180,
-                duration: 0.5,
-                ease: "back.in(1.7)"
-            })
-            .to(modalElement, {
-                opacity: 0,
-                duration: 0.3,
-                ease: "power2.in",
-                onComplete: () => {
-                    modalElement.style.display = 'none';
-                }
-            }, 0.2);
+        return tl;
     }
 }

@@ -10,20 +10,21 @@ export function generateWheelHTML(isDevelopment) {
       <div class="title"></div>
       
       <div class="wheel-container">
-        <div class="wheel-section">
-          <img src="./assets/images/wheel.png" alt="Wheel" class="wheel-image">
-          <div class="wheel-arrow">
-            <img src="./assets/images/arrow.png" alt="Arrow" class="arrow-image">
-          </div>
+        <div class="wheel-wrapper">
+          <div class="wheel-part1"></div>
+          <div class="wheel-part2"></div>
+          <div class="wheel-part3"></div>
+          <div class="wheel-text1"></div>
+          <div class="wheel-text2"></div>
         </div>
-        
-        <div class="spin-button-container">
-          <img src="./assets/images/button-spin.png" alt="Spin Button" class="spin-button">
+        <div class="wheel-part4"></div>
+        <div class="wheel-center-button">
+          <div class="wheel-part5"></div>
+          <div class="wheel-part6"></div>
         </div>
-        
-        <div class="counter-container">
-          <img src="./assets/images/counter.png" alt="Counter" class="counter-bg">
-          <span class="counter-text">2</span>
+        <div class="arrow">
+          <img src="./assets/images/arrow-part1.png" alt="Arrow Part 1" class="arrow-part1">
+          <img src="./assets/images/arrow-part2.png" alt="Arrow Part 2" class="arrow-part2">
         </div>
       </div>
     </div>
@@ -45,6 +46,17 @@ export function generateWheelHTML(isDevelopment) {
   </div>
   ${isDevelopment ? `
   <div class="dev-panel" id="devPanel" style="display: none;">
+    <div class="dev-section">
+      <h4>Game Type</h4>
+      <div class="mode-switcher">
+        <span class="mode-label">Cards</span>
+        <label class="switch">
+          <input type="checkbox" id="gameTypeSwitcher">
+          <span class="slider"></span>
+        </label>
+        <span class="mode-label">Wheel</span>
+      </div>
+    </div>
     <div class="dev-section">
       <h4>Game Mode</h4>
       <div class="mode-switcher">

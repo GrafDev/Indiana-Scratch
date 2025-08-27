@@ -14,8 +14,20 @@ import { WheelGame } from './wheel-game.js'
 
 // CONFIGURATION
 let gameMode = import.meta.env.VITE_GAME_MODE || 'click';
-const gameType = import.meta.env.VITE_GAME_TYPE || 'scratch';
+let gameType = import.meta.env.VITE_GAME_TYPE || 'scratch';
 const isDevelopment = import.meta.env.DEV;
+
+// In development mode, check localStorage for saved game type
+if (isDevelopment) {
+  try {
+    const savedState = JSON.parse(localStorage.getItem('indiana_scratch_dev_state') || '{}');
+    if (savedState.gameType) {
+      gameType = savedState.gameType;
+    }
+  } catch (error) {
+    console.warn('Failed to load dev state for game type:', error);
+  }
+}
 
 // GAME MODE LOGIC
 function updateGameMode() {
@@ -70,9 +82,12 @@ async function initializeApp() {
       preloaderElement.style.display = 'none';
       
       // INITIALIZATION
+      console.log(`Initializing game type: ${gameType}`);
       if (gameType === 'wheel') {
+        console.log('Using wheel template');
         appElement.innerHTML = generateWheelHTML(isDevelopment);
       } else {
+        console.log('Using scratch template');
         appElement.innerHTML = generateHTML(isDevelopment);
       }
       appElement.style.opacity = '1';
@@ -114,24 +129,38 @@ function initializeGameLogic() {
   // Setup touch controls
   setupTouchControls();
 
-  // Initialize card interactions
-  const cardInteractions = new CardInteractions();
-
-  // Listen for card revealed events
-  document.addEventListener('cardRevealed', (e) => {
-    const { cardBlock, percentage } = e.detail;
+  // Initialize game based on type
+  console.log(`Initializing game logic for type: ${gameType}`);
+  if (gameType === 'wheel') {
+    console.log('Initializing wheel game');
+    // Initialize wheel game
+    const wheelGame = new WheelGame();
     
-    // Here you can add game logic, like checking if all cards are revealed
-    const revealedCount = cardInteractions.getRevealedCardsCount();
-    if (revealedCount === 3) {
-      // All cards revealed! Game complete.
-    }
-  });
+    // Initialize animations for wheel elements
+    setTimeout(() => {
+      initializeEntranceAnimations();
+    }, 100);
+  } else {
+    console.log('Initializing card game');
+    // Initialize card interactions for scratch game
+    const cardInteractions = new CardInteractions();
 
-  // Initialize animations after DOM is ready
-  setTimeout(() => {
-    initializeEntranceAnimations();
-  }, 100);
+    // Listen for card revealed events
+    document.addEventListener('cardRevealed', (e) => {
+      const { cardBlock, percentage } = e.detail;
+      
+      // Here you can add game logic, like checking if all cards are revealed
+      const revealedCount = cardInteractions.getRevealedCardsCount();
+      if (revealedCount === 3) {
+        // All cards revealed! Game complete.
+      }
+    });
+
+    // Initialize animations after DOM is ready
+    setTimeout(() => {
+      initializeEntranceAnimations();
+    }, 100);
+  }
 }
 
 // Start the app

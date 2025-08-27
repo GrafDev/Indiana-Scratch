@@ -51,6 +51,17 @@ export function generateHTML(isDevelopment) {
   ${isDevelopment ? `
   <div class="dev-panel" id="devPanel" style="display: none;">
     <div class="dev-section">
+      <h4>Game Type</h4>
+      <div class="mode-switcher">
+        <span class="mode-label">Cards</span>
+        <label class="switch">
+          <input type="checkbox" id="gameTypeSwitcher">
+          <span class="slider"></span>
+        </label>
+        <span class="mode-label">Wheel</span>
+      </div>
+    </div>
+    <div class="dev-section">
       <h4>Game Mode</h4>
       <div class="mode-switcher">
         <span class="mode-label">Click</span>

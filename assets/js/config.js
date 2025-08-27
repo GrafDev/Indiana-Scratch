@@ -2,16 +2,16 @@ export const gameConfig = {
   // Base wheel size coefficient (300px base)
   baseWheelSize: 300,
   
-  // Wheel spinning configuration
+  // Wheel spinning configuration (Visit Wheel style - 6 sectors)
   spinning: {
-    // Array of target sectors (0-11) for each spin
-    targetSectors: [11, 8],
+    // Array of target sectors (1-6) for each spin
+    targetSectors: [1, 6],
     currentSpinIndex: 0,
-    sectorAngle: 360 / 12, // degrees per sector (12 sectors total)
+    sectorAngle: 360 / 6, // degrees per sector (6 sectors total)
     baseDuration: 3, // base animation duration in seconds
     minRotations: 3, // minimum number of full rotations
     maxRotations: 5, // maximum number of full rotations
-    currentSector: 0, // current sector position (starts at 0)
+    currentSector: 1, // current sector position (starts at 1)
     isSpinning: false // flag to prevent multiple spins
   },
   
@@ -107,21 +107,19 @@ export function getElementSize(elementType) {
   };
 }
 
-// Calculate rotation angle to reach target sector
+// Calculate rotation angle to reach target sector (Visit Wheel style)
 export function calculateRotationAngle(targetSector, currentTotalRotation = 0) {
   const config = gameConfig.spinning;
-  const currentRotation = config.currentSector * config.sectorAngle;
-  const targetRotation = targetSector * config.sectorAngle;
   
-  // Calculate angle difference
-  let angleDifference = targetRotation - currentRotation;
+  // Calculate target angle for sector (1-6 becomes 0-5, then * 60)
+  const targetRotation = (targetSector - 1) * config.sectorAngle;
   
-  // Random number of FULL rotations between min and max (integer values only)
+  // Random number of FULL rotations between min and max
   const randomFullRotations = Math.floor(Math.random() * (config.maxRotations - config.minRotations + 1)) + config.minRotations;
   const fullRotations = randomFullRotations * 360;
   
-  // Calculate final angle: current total rotation + full rotations + angle to target
-  const finalAngle = currentTotalRotation + fullRotations + angleDifference;
+  // Calculate final angle: current total rotation + full rotations + target angle
+  const finalAngle = currentTotalRotation + fullRotations + targetRotation;
   
   return finalAngle;
 }
