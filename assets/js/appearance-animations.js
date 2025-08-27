@@ -15,13 +15,24 @@ export function initializeEntranceAnimations() {
       opacity: 1,
       ease: "power2.out"
     }, 0.1)
-    .to('.box1 .man1, .box2 .man2', {
-      duration: 0.5,
+    .to('.box-man1, .box-man2', {
+      duration: 1,
+      opacity: 1,
+      ease: "power2.out"
+    }, 0.2)
+    .to('.cards-container', {
+      duration: 0.6,
+      opacity: 1,
+      y: 0,
+      ease: "back.out(1.2)"
+    }, 0.4)
+    .to('.card-block', {
+      duration: 0.4,
       opacity: 1,
       scale: 1,
-      y: 0,
-      ease: "back.out(1.7)"
-    }, 0.2)
+      stagger: 0.1,
+      ease: "back.out(1.5)"
+    }, 0.6)
     .call(() => {
       // Start logo continuous animation after entrance is complete
       startLogo1Part2Animation();

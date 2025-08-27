@@ -6,16 +6,22 @@ export default defineConfig(({ mode }) => {
     const privateEnv = loadEnv('private', process.cwd(), '')
     
     let gameMode = 'click'
+    let gameType = 'scratch'
     
     if (mode && mode !== 'development') {
         const parts = mode.split('-')
-        if (parts.length >= 1) {
-            gameMode = parts[0]
+        if (parts.length >= 2 && parts[0] === 'wheel') {
+            gameType = 'wheel'
+            gameMode = parts[1] // wheel-auto -> auto, wheel-click -> click
+        } else if (parts.length >= 1) {
+            gameType = 'scratch'
+            gameMode = parts[0] // auto -> auto, click -> click
         }
     }
     
     const currentSettings = {
-        VITE_GAME_MODE: gameMode
+        VITE_GAME_MODE: gameMode,
+        VITE_GAME_TYPE: gameType
     }
     
     const mergedEnv = { ...publicEnv, ...privateEnv, ...currentSettings }
@@ -36,7 +42,9 @@ export default defineConfig(({ mode }) => {
             }
         },
         build: {
-            outDir: mode === 'auto' ? 'dist/scratch-indiana-auto' : 
+            outDir: mode === 'wheel-auto' ? 'dist/wheel-indiana-auto' :
+                    mode === 'wheel-click' ? 'dist/wheel-indiana-click' :
+                    mode === 'auto' ? 'dist/scratch-indiana-auto' : 
                     mode === 'click' ? 'dist/scratch-indiana-click' : 'dist',
             assetsDir: 'assets',
             cssCodeSplit: true,

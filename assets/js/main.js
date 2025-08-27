@@ -1,15 +1,20 @@
 // IMPORTS
 import '../css/main.css'
+import './images-loader.js' // Import all images to ensure they are included in build
+import { ImagePreloader } from './preloader.js'
 import { initializeEntranceAnimations } from './appearance-animations.js'
 import { showModal, hideModal } from './modal-animations.js'
 import { generateHTML } from './html-template.js'
+import { generateWheelHTML } from './wheel-template.js'
 import { setupDevPanel, updateDevToggleText } from './dev-panel.js'
 import { applyResponsiveSizing } from './responsive-sizing.js'
 import { setupTouchControls } from './touch-controls.js'
 import { CardInteractions } from './card-interactions.js'
+import { WheelGame } from './wheel-game.js'
 
 // CONFIGURATION
 let gameMode = import.meta.env.VITE_GAME_MODE || 'click';
+const gameType = import.meta.env.VITE_GAME_TYPE || 'scratch';
 const isDevelopment = import.meta.env.DEV;
 
 // GAME MODE LOGIC
@@ -37,47 +42,97 @@ if (savedMode && (savedMode === 'click' || savedMode === 'auto')) {
   gameMode = savedMode;
 }
 
-// INITIALIZATION
-document.querySelector('#app').innerHTML = generateHTML(isDevelopment);
+// PRELOADER INITIALIZATION
+const preloader = new ImagePreloader();
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
+const preloaderElement = document.getElementById('preloader');
+const appElement = document.getElementById('app');
 
-// Setup development panel
-setupDevPanel(gameMode, updateGameMode, isDevelopment);
+// Set up progress callback
+preloader.setProgressCallback((progress, loaded, total) => {
+  progressBar.style.width = `${progress}%`;
+  progressText.textContent = `${progress}%`;
+  console.log(`Loading progress: ${progress}% (${loaded}/${total})`);
+});
 
-// Initialize switcher only in development
-if (isDevelopment) {
-  const modeSwitcher = document.getElementById('modeSwitcher');
-  if (modeSwitcher) {
-    modeSwitcher.checked = gameMode === 'auto';
+// Start preloading
+async function initializeApp() {
+  try {
+    console.log('Starting image preload...');
+    await preloader.loadAllImages();
+    console.log('All images loaded successfully!');
+    
+    // Hide preloader and show app
+    preloaderElement.classList.add('fade-out');
+    
+    setTimeout(() => {
+      preloaderElement.style.display = 'none';
+      
+      // INITIALIZATION
+      if (gameType === 'wheel') {
+        appElement.innerHTML = generateWheelHTML(isDevelopment);
+      } else {
+        appElement.innerHTML = generateHTML(isDevelopment);
+      }
+      appElement.style.opacity = '1';
+      
+      initializeGameLogic();
+    }, 500);
+    
+  } catch (error) {
+    console.error('Error during preloading:', error);
+    // Still show the app even if some images failed to load
+    preloaderElement.style.display = 'none';
+    appElement.innerHTML = generateHTML(isDevelopment);
+    appElement.style.opacity = '1';
+    initializeGameLogic();
   }
 }
 
-// Initialize mode
-updateGameMode();
+// Game initialization logic
+function initializeGameLogic() {
 
-// Setup responsive sizing
-applyResponsiveSizing();
-window.addEventListener('resize', applyResponsiveSizing);
+  // Setup development panel
+  setupDevPanel(gameMode, updateGameMode, isDevelopment);
 
-// Setup touch controls
-setupTouchControls();
-
-// Initialize card interactions
-const cardInteractions = new CardInteractions();
-
-// Listen for card revealed events
-document.addEventListener('cardRevealed', (e) => {
-  const { cardBlock, percentage } = e.detail;
-  console.log('Card revealed!', { cardBlock, percentage });
-  
-  // Here you can add game logic, like checking if all cards are revealed
-  const revealedCount = cardInteractions.getRevealedCardsCount();
-  if (revealedCount === 3) {
-    console.log('All cards revealed! Game complete.');
-    // Show modal or end game logic
+  // Initialize switcher only in development
+  if (isDevelopment) {
+    const modeSwitcher = document.getElementById('modeSwitcher');
+    if (modeSwitcher) {
+      modeSwitcher.checked = gameMode === 'auto';
+    }
   }
-});
 
-// Initialize animations after DOM is ready
-setTimeout(() => {
-  initializeEntranceAnimations();
-}, 100);
+  // Initialize mode
+  updateGameMode();
+
+  // Setup responsive sizing
+  applyResponsiveSizing();
+  window.addEventListener('resize', applyResponsiveSizing);
+
+  // Setup touch controls
+  setupTouchControls();
+
+  // Initialize card interactions
+  const cardInteractions = new CardInteractions();
+
+  // Listen for card revealed events
+  document.addEventListener('cardRevealed', (e) => {
+    const { cardBlock, percentage } = e.detail;
+    
+    // Here you can add game logic, like checking if all cards are revealed
+    const revealedCount = cardInteractions.getRevealedCardsCount();
+    if (revealedCount === 3) {
+      // All cards revealed! Game complete.
+    }
+  });
+
+  // Initialize animations after DOM is ready
+  setTimeout(() => {
+    initializeEntranceAnimations();
+  }, 100);
+}
+
+// Start the app
+initializeApp();

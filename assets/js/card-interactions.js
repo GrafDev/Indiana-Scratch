@@ -1,12 +1,14 @@
 import { ImageEraser } from './eraser-effect.js';
 import { showModal } from './modal-animations.js';
+import { images } from './images-loader.js';
 
 // Card interaction handler
 export class CardInteractions {
   constructor() {
     this.erasers = new Map();
     this.clickCount = 0;
-    this.cardImages = ['first-cart.png', 'second-cart.png', 'third-cart.png'];
+    this.cardImages = [images.firstCart, images.secondCart, images.thirdCart];
+    this.modalShown = false; // Флаг чтобы показать модалку только один раз
     this.init();
   }
   
@@ -44,13 +46,18 @@ export class CardInteractions {
     
     // Check if already erased
     if (this.erasers.has(cardBlock)) {
-      console.log('Card already processed');
       return;
     }
     
-    // Change the underlying image before creating canvas
+    // Change the underlying image and show with fade
     const imageIndex = this.clickCount % this.cardImages.length;
-    firstImage.src = `assets/images/${this.cardImages[imageIndex]}`;
+    firstImage.src = this.cardImages[imageIndex];
+    
+    // Show first card with fade effect
+    setTimeout(() => {
+      firstImage.style.opacity = '1';
+    }, 100);
+    
     this.clickCount++;
     
     // Create and start eraser
@@ -62,16 +69,14 @@ export class CardInteractions {
     
     // Auto erase 70% with fast animation
     eraser.autoErase(70, 1000).then(percentage => {
-      console.log(`Card erased: ${percentage.toFixed(1)}%`);
-      console.log(`Click count: ${this.clickCount}`);
       this.onCardRevealed(cardBlock, percentage);
       
       // Show modal after third card
-      if (this.clickCount === 3) {
-        console.log('Third card clicked, showing modal in 500ms');
+      if (this.clickCount === 3 && !this.modalShown) {
+        this.modalShown = true;
         setTimeout(() => {
           showModal();
-        }, 500);
+        }, 2000);
       }
     });
     

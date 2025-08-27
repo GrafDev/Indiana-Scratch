@@ -52,13 +52,21 @@
 .box-man1, .box-man2 {
   position: relative;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
-  opacity: 1;
+  opacity: 0;
   height: 75dvh;
+  transition: opacity 1s ease-in-out;
 }
 
 @media (orientation: portrait) {
   .box-man1, .box-man2 {
     height: 50dvh;
+  }
+}
+
+/* Mobile landscape - increase height to 95% */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .box-man1, .box-man2 {
+    height: 95dvh;
   }
 }
 

@@ -34,11 +34,17 @@ export function showModal() {
       modalOverlay.style.display = 'flex';
       modalOverlay.style.opacity = '0';
       
+      // Remove existing shine elements first
+      const existingShines = modalOverlay.querySelectorAll('.modal-shine-1');
+      existingShines.forEach(shine => shine.remove());
+      
       // Create shine elements
       const shine1 = document.createElement('div');
       shine1.className = 'modal-shine-1';
+      shine1.style.zIndex = '1';
       const shine2 = document.createElement('div');
       shine2.className = 'modal-shine-1 modal-shine-perpendicular';
+      shine2.style.zIndex = '1';
       modalOverlay.appendChild(shine1);
       modalOverlay.appendChild(shine2);
       
@@ -101,32 +107,12 @@ export function showModal() {
           ease: "elastic.out(1.2, 0.75)"
         }, 1.2)
         .to('.modal-shine-1', {
-          duration: 0.1,
-          opacity: 1,
+          duration: 0.5,
+          opacity: 0.8,
           ease: "power2.out"
         }, 1.2)
-        .to('.modal-shine-1', {
-          duration: 0.1,
-          opacity: 0,
-          ease: "power2.out"
-        }, 1.3)
-        .to('.modal-shine-1', {
-          duration: 0.1,
-          opacity: 1,
-          ease: "power2.out"
-        }, 1.4)
-        .to('.modal-shine-1', {
-          duration: 0.1,
-          opacity: 0,
-          ease: "power2.out"
-        }, 1.5)
-        .to('.modal-shine-1', {
-          duration: 0.2,
-          opacity: 1,
-          ease: "power2.out"
-        }, 1.6)
         .call(() => {
-          console.log('Modal animation complete');
+          // Modal animation complete
         }, [], 1.7);
     }
   }

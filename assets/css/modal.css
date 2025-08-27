@@ -8,7 +8,8 @@
   background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 10vh;
   z-index: 10000;
   opacity: 0;
   backdrop-filter: blur(5px);
@@ -25,6 +26,7 @@
   animation: rotate-shine 5s linear infinite;
   pointer-events: none;
   opacity: 0;
+  z-index: 1;
 }
 
 .modal-shine-1 {
@@ -47,6 +49,7 @@
   max-width: 105vw;
   max-height: 105vh;
   aspect-ratio: 1.29;
+  z-index: 1000;
 }
 
 @media (max-width: 768px) {
@@ -69,7 +72,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 10;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -86,7 +89,7 @@
 .modal-bg-left {
   width: auto;
   position: relative;
-  z-index: 2;
+  z-index: 12;
   margin-right: -3%;
 }
 
@@ -113,7 +116,7 @@
 .modal-bg-right {
   width: auto;
   position: relative;
-  z-index: 2;
+  z-index: 12;
   margin-left: -3%;
 }
 
@@ -128,16 +131,25 @@
   align-items: center;
   margin-top: 30px;
   opacity: 0;
+  z-index: 20;
 }
 
 .modal-button {
   width: 90%;
   height: 110px;
   cursor: pointer;
-  z-index: 2;
+  z-index: 15;
   text-decoration: none;
   transition: transform 0.15s ease-out;
   transform-origin: center;
+}
+
+/* Desktop - smaller button */
+@media (min-width: 1025px) {
+  .modal-button {
+    width: 70%;
+    height: 90px;
+  }
 }
 
 .modal-button:hover {
@@ -158,6 +170,17 @@
   .modal-button-container {
     height: 80px;
     margin-top: 15px;
+  }
+}
+
+/* Mobile landscape - move modal content higher */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .modal-overlay {
+    padding-top: 3vh;
+  }
+  
+  .modal-button-container {
+    margin-top: 5px;
   }
 }
 
