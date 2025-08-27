@@ -18,13 +18,18 @@ export class CardInteractions {
     const cardBlocks = document.querySelectorAll('.card-block');
     
     cardBlocks.forEach(cardBlock => {
-      cardBlock.addEventListener('click', (e) => {
+      // Handle both click and touch events
+      const handleEvent = (e) => {
         e.preventDefault();
         e.stopPropagation();
         this.handleCardClick(cardBlock);
-      });
+      };
+      
+      cardBlock.addEventListener('click', handleEvent);
+      cardBlock.addEventListener('touchend', handleEvent);
       
       cardBlock.style.cursor = 'pointer';
+      cardBlock.style.touchAction = 'manipulation'; // Better touch response
     });
   }
   

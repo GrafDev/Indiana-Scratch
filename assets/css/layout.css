@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 20px 0 20px 0;
+  padding: 10px 0 10px 0;
   box-sizing: border-box;
 }
 
@@ -23,6 +23,7 @@
   justify-content: space-between;
   align-items: center;
   pointer-events: none;
+  z-index: 0;
 }
 
 .box1, .box2 {
@@ -30,26 +31,25 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  pointer-events: auto;
+  pointer-events: none;
   height: 100%;
   overflow: hidden;
   box-sizing: border-box;
 }
 
 .game-container {
-  width: var(--game-container-width, 300px);
-  height: var(--game-container-height, 300px);
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  margin-top: 30px;
 }
 
 /* Tablet styles */
 @media (min-aspect-ratio: 6/10) and (max-aspect-ratio: 13/10) {
   .game-container {
     width: calc(var(--game-container-width, 300px) * 0.9);
-    height: calc(var(--game-container-height, 300px) * 0.9);
   }
   
   .media-container {
@@ -61,7 +61,6 @@
 @media (min-aspect-ratio: 13/10) {
   .game-container {
     width: calc(var(--game-container-width, 300px) * 0.8);
-    height: calc(var(--game-container-height, 300px) * 0.8);
   }
   
   .media-container {
@@ -69,10 +68,29 @@
   }
 }
 
+/* Mobile portrait - no flex grow */
+@media screen and (max-width: 1024px) and (orientation: portrait) {
+  .cards-container {
+    flex: none;
+  }
+}
+
+/* Mobile landscape - bigger container */
+@media screen and (max-width: 1024px) and (orientation: landscape) {
+  .main-container {
+    max-width: 100vw;
+  }
+}
+
+
 /* Tablet portrait - move wheel up */
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
   .main-container {
     padding-bottom: 15vh;
+  }
+  
+  .game-container {
+    flex: none;
   }
 }
 

@@ -4,6 +4,8 @@
   align-items: center;
   gap: 25px;
   width: fit-content;
+  flex: 1;
+  justify-content: center;
 }
 
 .cards-top-row {
@@ -15,16 +17,54 @@
   position: relative;
 }
 
-/* Mobile */
-@media screen and (max-width: 768px) {
+/* Mobile portrait */
+@media screen and (max-width: 1024px) and (orientation: portrait) {
+  .cards-container {
+    width: 85vw;
+  }
+  
+  .cards-top-row {
+    flex-direction: column;
+  }
+  
   .card-block {
-    width: 35dvw;
-    height: calc(35dvw / 1.8);
+    width: 70vw;
+    height: calc(70vw / 1.8);
   }
 }
 
-/* Tablet and Desktop */
-@media screen and (min-width: 769px) {
+/* Mobile landscape */
+@media screen and (max-width: 1024px) and (orientation: landscape) {
+  .cards-container {
+    width: 90vw;
+    gap: 15px;
+  }
+  
+  .cards-top-row {
+    flex-direction: row;
+    gap: 15px;
+  }
+  
+  .card-block {
+    width: 48vmin;
+    height: calc(48vmin / 1.8);
+  }
+}
+
+/* Tablet portrait override */
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .cards-top-row {
+    flex-direction: row;
+  }
+  
+  .card-block {
+    width: calc((var(--game-container-width, 300px) - 20px) / 2);
+    height: calc(((var(--game-container-width, 300px) - 20px) / 2) / 1.8);
+  }
+}
+
+/* Desktop only */
+@media screen and (min-width: 1025px) {
   .cards-container {
     transform: translateY(-50px);
   }
@@ -74,7 +114,7 @@
 }
 
 .card-processing {
-  opacity: 0.8;
+  opacity: 1;
   pointer-events: none;
 }
 

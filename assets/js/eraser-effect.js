@@ -35,6 +35,7 @@ export class ImageEraser {
     this.canvas.style.height = '100%';
     this.canvas.style.pointerEvents = 'none';
     this.canvas.style.zIndex = '5';
+    this.canvas.style.opacity = '1';
     
     // Make image container relative
     this.image.parentElement.style.position = 'relative';
@@ -45,9 +46,9 @@ export class ImageEraser {
     // Position canvas over image
     this.image.parentElement.appendChild(this.canvas);
     
-    // Hide original image after canvas is ready
+    // Hide original image completely after canvas is ready
     setTimeout(() => {
-      this.image.style.opacity = '0';
+      this.image.style.display = 'none';
     }, 100);
     
     console.log('Canvas visible:', this.canvas.style.opacity !== '0');

@@ -95,10 +95,10 @@ export function showModal() {
           ease: "power2.out"
         }, 0.2)
         .to('.modal-button-container', {
-          duration: 0.4,
+          duration: 0.6,
           opacity: 1,
           scale: 1.5,
-          ease: "back.out(2.5)"
+          ease: "elastic.out(1.2, 0.75)"
         }, 1.2)
         .to('.modal-shine-1', {
           duration: 0.1,

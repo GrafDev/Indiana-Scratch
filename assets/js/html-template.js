@@ -8,8 +8,7 @@ export function generateHTML(isDevelopment) {
         <img src="assets/images/logo1-part2.png" alt="Logo 1 Part 2" class="logo1-part2">
       </div>
       <div class="title"></div>
-      <div class="game-container">
-        <div class="cards-container">
+      <div class="cards-container">
           <div class="cards-top-row">
             <div class="card-block">
               <img src="assets/images/bg-cart.png" alt="Card Background" class="card-bg">
@@ -31,7 +30,6 @@ export function generateHTML(isDevelopment) {
             <img src="assets/images/border-cart.png" alt="Card Border" class="card-border">
           </div>
         </div>
-      </div>
     </div>
     <div class="media-container">
       <div class="box1">

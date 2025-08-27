@@ -128,17 +128,34 @@
   left: 0;
 }
 
-/* Mobile title and logo */
-@media (max-width: 768px), (max-aspect-ratio: 6/10) {
+/* Mobile portrait */
+@media (max-width: 1024px) and (orientation: portrait) {
   .title {
     background-image: url('../images/title-mobile.png');
-    width: 95dvw;
-    height: auto;
-    aspect-ratio: 240/45;
+    width: 98vw;
+    height: 15vh;
+    background-size: contain;
   }
   
   .logo1 {
-    width: var(--logo1-width, 40vw);
-    height: calc(var(--logo1-width, 40vw) / 3.6);
+    width: 70vw;
+    height: 10vh;
+  }
+}
+
+/* Mobile landscape */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .title {
+    background-image: url('../images/title.png');
+    width: 50vw;
+    height: 12vh;
+    background-size: 80%;
+    background-position: center;
+    margin-top: 40px;
+  }
+  
+  .logo1 {
+    width: 35vw;
+    height: 8vh;
   }
 }

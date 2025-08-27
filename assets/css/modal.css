@@ -136,10 +136,17 @@
   cursor: pointer;
   z-index: 2;
   text-decoration: none;
+  transition: transform 0.15s ease-out;
+  transform-origin: center;
+}
+
+.modal-button:hover {
+  transform: scale(1.05);
 }
 
 .modal-button:active {
-  transform: translateX(-50%) scale(0.95);
+  transform: scale(0.9);
+  transition: transform 0.1s ease-in;
 }
 
 @media (max-width: 768px) {
