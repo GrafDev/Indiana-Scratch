@@ -5,7 +5,7 @@ import { startLogo1Part2Animation } from './logo-animations.js'
 export function initializeEntranceAnimations() {
   // Show all hidden elements with entrance animation
   gsap.timeline()
-    .to('.title', {
+    .to('.title-desktop, .title-mobile', {
       duration: 0.5,
       opacity: 1,
       ease: "power2.out"

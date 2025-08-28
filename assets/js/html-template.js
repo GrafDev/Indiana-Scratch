@@ -9,7 +9,8 @@ export function generateHTML(isDevelopment) {
         <img src="${images.logo1Part1}" alt="Logo 1 Part 1" class="logo1-part1">
         <img src="${images.logo1Part2}" alt="Logo 1 Part 2" class="logo1-part2">
       </div>
-      <div class="title"></div>
+      <div class="title-desktop"></div>
+      <div class="title-mobile"></div>
       <div class="cards-container">
           <div class="cards-top-row">
             <div class="card-block">

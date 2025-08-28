@@ -2,6 +2,13 @@
 
 /* ===== PHONES ===== */
 
+/* General mobile portrait positioning */
+@media screen and (max-width: 1024px) and (orientation: portrait) {
+  .wheel-container {
+    transform: translateY(100px);
+  }
+}
+
 /* Phone Portrait: маленькое колесо, узкий gap */
 @media screen and (max-width: 480px) and (max-aspect-ratio: 9/16) {
   .wheel-container {
@@ -61,14 +68,20 @@
 
 /* ===== TABLETS ===== */
 
-/* Small Tablet Portrait: iPad Mini портрет */
-@media screen and (min-width: 768px) and (max-width: 834px) and (orientation: portrait) and (pointer: coarse) {
+/* General tablet portrait positioning */
+@media (orientation: portrait) and (min-width: 768px) {
   .wheel-container {
-    gap: 25px;
-    max-width: min(420px, 80vw);
+    transform: translateY(100px);
   }
-  
-  
+}
+
+/* Small Tablet Portrait: iPad Mini портрет */
+@media screen and (min-width: 768px) and (max-width: 834px) and (orientation: portrait) {
+  .wheel-container {
+    gap: 40px;
+    max-width: min(420px, 80vw);
+    transform: translateY(50px) !important;
+  }
 }
 
 /* Small Tablet Landscape: iPad Mini ландшафт */
@@ -87,9 +100,8 @@
   .wheel-container {
     gap: 30px;
     max-width: min(480px, 85vw);
+    transform: translateY(100px);
   }
-  
-  
 }
 
 /* Large Tablet Landscape: iPad Air/Pro ландшафт */

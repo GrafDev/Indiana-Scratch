@@ -10,17 +10,12 @@
   aspect-ratio: 1;
   justify-content: center;
   opacity: 1;
-  transform: translateY(0);
+  /* transform moved to wheel-responsive.css */
   position: relative;
   z-index: 100;
 }
 
-/* iPad portrait - move wheel down */
-@media (orientation: portrait) and (min-width: 768px) {
-  .wheel-container {
-    transform: translateY(100px);
-  }
-}
+/* iPad portrait - handled in wheel-responsive.css */
 
 .wheel-wrapper {
   position: relative;
@@ -179,13 +174,7 @@
   left: 0;
 }
 
-/* Mobile portrait */
-@media screen and (max-width: 1024px) and (orientation: portrait) {
-  .wheel-container {
-    gap: 20px;
-    transform: translateY(100px);
-  }
-}
+/* Mobile portrait - positioning handled in wheel-responsive.css */
 
 /* Mobile landscape */
 @media screen and (max-width: 1024px) and (orientation: landscape) {

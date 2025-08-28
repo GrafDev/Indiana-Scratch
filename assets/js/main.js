@@ -122,7 +122,7 @@ function initializeGameLogic() {
   // Initialize mode
   updateGameMode();
 
-  // Setup responsive sizing
+  // Setup responsive sizing for SIZES only (not positioning)
   applyResponsiveSizing();
   window.addEventListener('resize', applyResponsiveSizing);
 

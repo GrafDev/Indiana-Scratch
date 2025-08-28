@@ -7,7 +7,8 @@ export function generateWheelHTML(isDevelopment) {
         <img src="./assets/images/logo1-part1.png" alt="Logo 1 Part 1" class="logo1-part1">
         <img src="./assets/images/logo1-part2.png" alt="Logo 1 Part 2" class="logo1-part2">
       </div>
-      <div class="title"></div>
+      <div class="title-desktop"></div>
+      <div class="title-mobile"></div>
       
       <div class="wheel-container">
         <div class="wheel-wrapper">
