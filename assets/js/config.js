@@ -31,7 +31,7 @@ export const gameConfig = {
       wheelMultiplier: 0.7, // 70% of base size for tablet
     },
     desktop: {
-      wheelMultiplier: 1.0,  // 100% base size for desktop
+      wheelMultiplier: 0.8,  // 80% base size for desktop
     }
   },
   
@@ -60,6 +60,22 @@ export const gameConfig = {
     wheel: {
       widthRatio: 1.0,    // 100% of wheel size
       heightRatio: 1.0,   // 100% of wheel size
+    },
+    arrow: {
+      widthRatio: 0.14,   // 14% of wheel size 
+      heightRatio: 0.21,  // 21% of wheel size
+    },
+    arrowMobile: {
+      widthRatio: 0.16,   // 16% of wheel size for mobile portrait
+      heightRatio: 0.24,  // 24% of wheel size for mobile portrait
+    },
+    arrowLandscape: {
+      widthRatio: 0.13,   // 13% of wheel size for mobile landscape
+      heightRatio: 0.195, // 19.5% of wheel size for mobile landscape
+    },
+    wheelPart4: {
+      widthRatio: 0.95,   // 95% of wheel size
+      heightRatio: 0.95,  // 95% of wheel size
     }
   }
 };

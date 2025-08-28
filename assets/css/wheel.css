@@ -6,8 +6,8 @@
   align-items: center;
   gap: 30px;
   width: 100%;
-  max-width: min(650px, 95vw);
-  flex: 1;
+  max-width: min(1200px, 95vw);
+  aspect-ratio: 1;
   justify-content: center;
   opacity: 1;
   transform: translateY(0);
@@ -19,10 +19,9 @@
   position: relative;
   opacity: 1;
   transform: scale(1);
-  width: 100%;
-  max-width: min(650px, 95vw);
+  width: var(--wheel-size, 300px);
+  height: var(--wheel-size, 300px);
   aspect-ratio: 1;
-  height: auto;
 }
 
 .wheel-part1, .wheel-part2, .wheel-part3, .wheel-text1, .wheel-text2 {
@@ -54,23 +53,26 @@
 .wheel-text1 {
   background-image: url('../images/wheel-text1.png');
   z-index: 25;
+  transform: scale(0.95);
 }
 
 .wheel-text2 {
   background-image: url('../images/wheel-text2.png');
   z-index: 25;
+  transform: scale(0.95);
 }
 
 .wheel-part4 {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: var(--wheel-part4-width, 300px);
+  height: var(--wheel-part4-height, 300px);
   background-image: url('../images/wheel-part4.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 30;
   opacity: 0;
 }
@@ -150,12 +152,14 @@
 .arrow {
   position: absolute;
   top: 50%;
-  left: -70px;
+  left: calc(50% - var(--wheel-size, 300px) / 2 - 0.03 * var(--wheel-size, 300px));
   transform: translateY(-50%);
   z-index: 50;
   opacity: 1;
-  width: 180px;
-  height: 270px;
+  width: var(--arrow-width, 140px);
+  height: var(--arrow-height, 210px);
+  box-sizing: border-box;
+  overflow: visible;
 }
 
 .arrow-part1, .arrow-part2 {
@@ -173,23 +177,13 @@
   .wheel-container {
     gap: 20px;
   }
-  
-  .arrow {
-    top: -60px;
-    width: 60px;
-    height: 90px;
-  }
 }
 
 /* Mobile landscape */
 @media screen and (max-width: 1024px) and (orientation: landscape) {
   .wheel-container {
     gap: 15px;
-  }
-  
-  .arrow {
-    top: -50px;
-    width: 50px;
-    height: 75px;
+    max-width: min(400px, 80vw);
+    max-height: 80vh;
   }
 }

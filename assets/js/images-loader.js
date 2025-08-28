@@ -24,6 +24,8 @@ import wheelText1 from '../images/wheel-text1.png';
 import wheelText2 from '../images/wheel-text2.png';
 import arrowPart1 from '../images/arrow-part1.png';
 import arrowPart2 from '../images/arrow-part2.png';
+import scratchModalText from '../images/scratch-modal-text.png';
+import wheelModalText from '../images/wheel-modal-text.png';
 
 // Export images for use in other modules
 export const images = {
@@ -50,7 +52,9 @@ export const images = {
   wheelText1,
   wheelText2,
   arrowPart1,
-  arrowPart2
+  arrowPart2,
+  scratchModalText,
+  wheelModalText
 };
 
 // Helper function to get image URL

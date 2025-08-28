@@ -1,9 +1,75 @@
 import { gsap } from 'gsap'
 import { calculateWheelSize } from './config.js'
+import { images } from './images-loader.js'
+
+// Function to update modal size
+function updateModalSize() {
+  const modalOverlay = document.getElementById('modalOverlay');
+  if (!modalOverlay || modalOverlay.style.display === 'none') return;
+  
+  const wheelSize = calculateWheelSize();
+  const modalContent = document.querySelector('.modal-content');
+  if (modalContent) {
+    const screenWidth = window.innerWidth;
+    const aspectRatio = screenWidth / window.innerHeight;
+    let modalWidth = wheelSize;
+    
+    if (aspectRatio < 0.6) {
+      // Mobile portrait: 75% of screen width
+      modalWidth = screenWidth * 0.75;
+    }
+    
+    modalContent.style.width = `${modalWidth}px`;
+    modalContent.style.height = `${modalWidth / 1.29}px`;
+    
+    // Update center container width if modal is showing
+    const modalBackground = document.querySelector('.modal-background');
+    if (modalBackground) {
+      const finalWidth = modalBackground.offsetWidth * 1.04;
+      const centerContainer = document.querySelector('.modal-bg-center');
+      if (centerContainer) {
+        gsap.set(centerContainer, {
+          width: `${finalWidth}px`
+        });
+      }
+    }
+  }
+}
+
+// Set up resize listener
+let resizeListenerAdded = false;
 
 // Modal functions
 export function showModal() {
   const modalOverlay = document.getElementById('modalOverlay');
+  
+  // Determine game type and set appropriate text image
+  const isDevelopment = import.meta.env.DEV;
+  let gameType = import.meta.env.VITE_GAME_TYPE || 'scratch';
+  
+  // In development mode, check localStorage for saved game type
+  if (isDevelopment) {
+    try {
+      const savedState = JSON.parse(localStorage.getItem('indiana_scratch_dev_state') || '{}');
+      if (savedState.gameType) {
+        gameType = savedState.gameType;
+      }
+    } catch (error) {
+      console.warn('Failed to load dev state for game type:', error);
+    }
+  }
+  
+  // Set modal text image based on game type
+  const modalTextImg = document.getElementById('modalText');
+  if (modalTextImg) {
+    modalTextImg.src = gameType === 'wheel' ? images.wheelModalText : images.scratchModalText;
+  }
+  
+  // Add resize listener if not already added
+  if (!resizeListenerAdded) {
+    window.addEventListener('resize', updateModalSize);
+    resizeListenerAdded = true;
+  }
   
   // Disable other animations during modal
   document.body.classList.add('modal-active');
