@@ -62,7 +62,7 @@
 /* ===== TABLETS ===== */
 
 /* Small Tablet Portrait: iPad Mini портрет */
-@media screen and (min-width: 768px) and (max-width: 820px) and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (pointer: coarse) {
+@media screen and (min-width: 768px) and (max-width: 834px) and (orientation: portrait) and (pointer: coarse) {
   .wheel-container {
     gap: 25px;
     max-width: min(420px, 80vw);
