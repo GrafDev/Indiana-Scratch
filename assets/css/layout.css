@@ -89,12 +89,12 @@
   
   .box1 {
     position: absolute;
-    left: -20%;
+    left: 0%;
   }
   
   .box2 {
     position: absolute;
-    right: -20%;
+    right: 0%;
   }
 }
 

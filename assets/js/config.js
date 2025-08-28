@@ -50,8 +50,8 @@ export const gameConfig = {
       heightRatio: 0.5,   // 50% of wheel size
     },
     manMobile: {
-      widthRatio: 0.45,   // 45% of wheel size for mobile
-      heightRatio: 0.6,   // 60% of wheel size for mobile
+      widthRatio: 0.675,  // 67.5% of wheel size for mobile (45% * 1.5)
+      heightRatio: 0.9,   // 90% of wheel size for mobile (60% * 1.5)
     },
     title: {
       widthRatio: 0.8,    // 80% of wheel size

@@ -151,6 +151,21 @@
   }
 }
 
+/* Mobile phones portrait - man adjustments */
+@media (max-width: 480px) and (orientation: portrait) {
+  .box-man2 .man2-part1 {
+    z-index: 150;
+  }
+  
+  .box-man1 .man1-part1 {
+    top: -40%;
+  }
+  
+  .box-man2 .man2-part2 {
+    top: -40%;
+  }
+}
+
 /* Mobile landscape */
 @media (max-width: 1024px) and (orientation: landscape) {
   .title {
