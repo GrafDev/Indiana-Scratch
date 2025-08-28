@@ -54,8 +54,8 @@ export const gameConfig = {
       heightRatio: 0.9,   // 90% of wheel size for mobile (60% * 1.5)
     },
     title: {
-      widthRatio: 0.8,    // 80% of wheel size
-      heightRatio: 0.15,  // 15% of wheel size
+      widthRatio: 1.0,    // 100% of wheel size
+      heightRatio: 0.19,  // 19% of wheel size
     },
     wheel: {
       widthRatio: 1.0,    // 100% of wheel size
@@ -99,8 +99,8 @@ export function calculateWheelSize() {
       // Tablet: reduce to 75%
       availableSpace = availableSpace * 0.75;
     } else if (aspectRatio >= 1.3) {
-      // Desktop: reduce to 80%
-      availableSpace = availableSpace * 0.8;
+      // Desktop: reduce to 70%
+      availableSpace = availableSpace * 0.7;
     }
   }
   

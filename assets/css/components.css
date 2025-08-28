@@ -140,8 +140,8 @@
 @media (max-width: 1024px) and (orientation: portrait) {
   .title {
     background-image: url('../images/title-mobile.png');
-    width: 98vw;
-    height: 15vh;
+    width: 90vw;
+    height: 12vh;
     background-size: contain;
   }
   
@@ -151,15 +151,21 @@
   }
 }
 
+/* iPad Mini portrait - bigger title */
+@media screen and (min-width: 744px) and (max-width: 834px) and (orientation: portrait) {
+  .title {
+    width: 85vw;
+    height: 12vh;
+  }
+}
+
+
 /* Mobile phones portrait - man adjustments */
 @media (max-width: 480px) and (orientation: portrait) {
   .box-man2 .man2-part1 {
     z-index: 150;
   }
   
-  .box-man1 .man1-part1 {
-    top: -40%;
-  }
   
   .box-man2 .man2-part2 {
     top: -40%;

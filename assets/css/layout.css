@@ -122,6 +122,21 @@
   .main-container {
     padding-bottom: 15vh;
   }
+  
+  .wheel-container {
+    transform: translateY(100px);
+  }
+}
+
+/* iPad Mini portrait - move wheel lower */
+@media screen and (min-width: 744px) and (max-width: 834px) and (orientation: portrait) {
+  .main-container {
+    padding-bottom: 40vh;
+  }
+  
+  .game-container {
+    margin-top: 150px;
+  }
 }
 
 /* Position logo1 in main-container on all orientations */

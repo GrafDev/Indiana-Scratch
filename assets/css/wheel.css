@@ -15,6 +15,13 @@
   z-index: 100;
 }
 
+/* iPad portrait - move wheel down */
+@media (orientation: portrait) and (min-width: 768px) {
+  .wheel-container {
+    transform: translateY(100px);
+  }
+}
+
 .wheel-wrapper {
   position: relative;
   opacity: 1;
@@ -176,6 +183,7 @@
 @media screen and (max-width: 1024px) and (orientation: portrait) {
   .wheel-container {
     gap: 20px;
+    transform: translateY(100px);
   }
 }
 
