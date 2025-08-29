@@ -7,6 +7,8 @@ import secondCart from '../images/second-cart.png';
 import thirdCart from '../images/third-cart.png';
 import logo1Part1 from '../images/logo1-part1.png';
 import logo1Part2 from '../images/logo1-part2.png';
+import logo2Part1 from '../images/logo2-part1.png';
+import logo2Part2 from '../images/logo2-part2.png';
 import man1Part1 from '../images/man1-part1.png';
 import man1Part2 from '../images/man1-part2.png';
 import man2Part1 from '../images/man2-part1.png';
@@ -38,6 +40,8 @@ export const images = {
   thirdCart,
   logo1Part1,
   logo1Part2,
+  logo2Part1,
+  logo2Part2,
   man1Part1,
   man1Part2,
   man2Part1,

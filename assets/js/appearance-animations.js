@@ -15,6 +15,11 @@ export function initializeEntranceAnimations() {
       opacity: 1,
       ease: "power2.out"
     }, 0.1)
+    .to('.main-container .logo2', {
+      duration: 0.5,
+      opacity: 1,
+      ease: "power2.out"
+    }, 0.2)
     .to('.box-man1, .box-man2', {
       duration: 1,
       opacity: 1,

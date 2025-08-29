@@ -2,6 +2,7 @@
 
 /* Initial hidden state - все элементы анимации скрыты до инициализации GSAP */
 .main-container .logo1,
+.main-container .logo2,
 .box1 .man1,
 .box2 .man2,
 .title {

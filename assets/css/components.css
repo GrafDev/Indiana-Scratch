@@ -12,6 +12,32 @@
   display: block;
 }
 
+.logo2 {
+  display: inline-block;
+  position: relative;
+  width: var(--logo2-width, 15vw);
+  height: calc(var(--logo2-width, 15vw) / 4);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.logo2 img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.logo2-part1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.logo2-part2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .logo1-part1 {
   position: absolute;
   top: 0;
@@ -173,31 +199,41 @@
   
   .title-mobile {
     display: flex;
-    width: 80vw;
-    height: 10vh;
+    width: 100%;
+    height: 15%;
   }
   
   .logo1 {
-    width: 70vw;
-    height: 10vh;
+    width: 100%;
+    height: 15%;
+  }
+  
+  .logo2 {
+    width: 100%;
+    height: 12%;
   }
 }
 
 /* iPad Mini portrait - bigger mobile title */
 @media screen and (min-width: 744px) and (max-width: 834px) and (orientation: portrait) {
   .title-mobile {
-    width: 85vw;
-    height: 20vh;
+    width: 100%;
+    height: 20%;
   }
   
   .title-desktop {
-    width: 85vw;
-    height: 25vh;
+    width: 100%;
+    height: 25%;
   }
   
   .logo1 {
-    width: 60vw;
-    height: 12vh;
+    width: 100%;
+    height: 15%;
+  }
+  
+  .logo2 {
+    width: 100%;
+    height: 12%;
   }
   
   .main-container {
@@ -222,8 +258,8 @@
 @media (max-width: 1024px) and (orientation: landscape) {
   .title-desktop {
     display: flex;
-    width: 50vw;
-    height: 12vh;
+    width: 100%;
+    height: 15%;
     background-size: 80%;
     background-position: center;
     margin-top: 40px;
@@ -234,7 +270,12 @@
   }
   
   .logo1 {
-    width: 35vw;
-    height: 8vh;
+    width: 100%;
+    height: 12%;
+  }
+  
+  .logo2 {
+    width: 100%;
+    height: 10%;
   }
 }
