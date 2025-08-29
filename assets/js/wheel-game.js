@@ -94,6 +94,12 @@ export class WheelGame {
                 rotate: 1,
                 duration: 0.8,
                 ease: 'sine.inOut'
+            })
+            .to([this.part5, this.part6], {
+                scale: 1.0,
+                rotate: 0,
+                duration: 0.6,
+                ease: 'sine.inOut'
             });
     }
 
@@ -131,9 +137,15 @@ export class WheelGame {
         // Stop breathing animation
         this.stopButtonBreathing();
         
-        // Remove cursor pointer during spin
-        if (this.part5) this.part5.style.cursor = 'default';
-        if (this.part6) this.part6.style.cursor = 'default';
+        // Remove cursor pointer and reduce brightness and saturation during spin
+        if (this.part5) {
+            this.part5.style.cursor = 'default';
+            this.part5.style.filter = 'brightness(0.85) saturate(0.9)';
+        }
+        if (this.part6) {
+            this.part6.style.cursor = 'default';
+            this.part6.style.filter = 'brightness(0.85) saturate(0.9)';
+        }
 
         // Button press animation
         const pressAnimation = WheelAnimations.buttonPress();
@@ -167,14 +179,15 @@ export class WheelGame {
     onSpinComplete() {
         this.isSpinning = false;
 
-        // Show part4 with flicker animation when wheel stops
-        if (this.part4) {
-            this.part4.classList.add('show');
+        // Restore cursor pointer, brightness and saturation
+        if (this.part5) {
+            this.part5.style.cursor = 'pointer';
+            this.part5.style.filter = 'brightness(1) saturate(1)';
         }
-
-        // Restore cursor pointer
-        if (this.part5) this.part5.style.cursor = 'pointer';
-        if (this.part6) this.part6.style.cursor = 'pointer';
+        if (this.part6) {
+            this.part6.style.cursor = 'pointer';
+            this.part6.style.filter = 'brightness(1) saturate(1)';
+        }
         
         const maxSpins = this.gameMode === 'auto' ? 1 : 2;
         

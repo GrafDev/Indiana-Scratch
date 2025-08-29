@@ -17,6 +17,7 @@ import scratch from '../images/scratch.png';
 import wheelPart1 from '../images/wheel-part1.png';
 import wheelPart2 from '../images/wheel-part2.png';
 import wheelPart3 from '../images/wheel-part3.png';
+import wheelPart31 from '../images/wheel-part3-1.png';
 import wheelPart4 from '../images/wheel-part4.png';
 import wheelPart5 from '../images/wheel-part5.png';
 import wheelPart6 from '../images/wheel-part6.png';
@@ -46,6 +47,7 @@ export const images = {
   wheelPart1,
   wheelPart2,
   wheelPart3,
+  wheelPart31,
   wheelPart4,
   wheelPart5,
   wheelPart6,

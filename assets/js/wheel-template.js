@@ -15,6 +15,7 @@ export function generateWheelHTML(isDevelopment) {
           <div class="wheel-part1"></div>
           <div class="wheel-part2"></div>
           <div class="wheel-part3"></div>
+          <div class="wheel-part3-1"></div>
           <div class="wheel-text1"></div>
           <div class="wheel-text2"></div>
         </div>
